@@ -85,7 +85,6 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
                 // **减少 hideFrames 计时**
                 if (hideFrames > 0)
                     hideFrames--;
-
             }
         }
         public override void SetDefaults(Projectile projectile)
@@ -217,7 +216,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
         {
             if (isSpecialArrow)
             {
-                var npcGlobal = target.GetGlobalNPC<TenderElegyGNPC>();
+                var npcGlobal = target.GetGlobalNPC<TenderElegyBeilGNPC>();
 
                 // 先尝试生成铃铛弹幕
                 if (!npcGlobal.hasBell)

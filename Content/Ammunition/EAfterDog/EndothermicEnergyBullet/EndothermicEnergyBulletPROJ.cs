@@ -27,7 +27,7 @@ namespace CalamityRangerExtra.Content.Ammunition.EAfterDog.EndothermicEnergyBull
         public Vector2 baseVel;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
         public override bool PreDraw(ref Color lightColor)
@@ -36,7 +36,7 @@ namespace CalamityRangerExtra.Content.Ammunition.EAfterDog.EndothermicEnergyBull
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
                 // 判断 timeLeft 是否小于或等于 x
-                if (Projectile.timeLeft <= 240)
+                //if (Projectile.timeLeft <= 250)
                 {
                     Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/DrainLineBloom").Value;
                     CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], (baseColor * 0.7f) with { A = 0 }, 1, texture);
@@ -58,7 +58,7 @@ namespace CalamityRangerExtra.Content.Ammunition.EAfterDog.EndothermicEnergyBull
             Projectile.ignoreWater = true;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 300;
-            Projectile.MaxUpdates = 6;
+            Projectile.MaxUpdates = 4;
             Projectile.alpha = 255;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 14;
@@ -81,7 +81,7 @@ namespace CalamityRangerExtra.Content.Ammunition.EAfterDog.EndothermicEnergyBull
                 baseVel = Projectile.velocity;
             }
 
-            if (Projectile.timeLeft % 3 == 0)
+            if (Projectile.timeLeft <= 295 && Projectile.timeLeft % 3 == 0)
             {
                 // 检查是否启用了特效
                 if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)

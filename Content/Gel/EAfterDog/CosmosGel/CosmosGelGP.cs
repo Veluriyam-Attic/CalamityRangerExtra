@@ -26,40 +26,80 @@ namespace CalamityRangerExtra.Content.Gel.EAfterDog.CosmosGel
                 IsCosmosGelInfused = true;
                 projectile.netUpdate = true;
                 projectile.damage = (int)(projectile.damage * 0.70f); // 减少 30% 伤害
+                projectile.Kill(); // 直接删除自己
 
-                // 检查场上是否已有超过 5 个 某种 弹幕
-                int sparkCount = 0;
+
+                // **检查场上已存在的 `CosmosGelEater1Head` 数量**
+                int wormHeadCount = 0;
                 foreach (Projectile proj in Main.projectile)
                 {
-                    if (proj.active && proj.type == ModContent.ProjectileType<CosmosGelEater>())
+                    if (proj.active && proj.type == ModContent.ProjectileType<CosmosGelEater1Head>())
                     {
-                        sparkCount++;
-                        if (sparkCount >= 5)
-                            return; // 如果已存在 5 个 某种 弹幕，则不释放新的
+                        wormHeadCount++;
+                        if (wormHeadCount >= 7)
+                            return;
                     }
                 }
 
-                // 在玩家位置附近生成 1~2 个 CosmosGelEater 弹幕
-                int extraProjectiles = Main.rand.Next(1, 3);
-                for (int i = 0; i < extraProjectiles; i++)
-                {
-                    Vector2 spawnOffset = new Vector2(Main.rand.Next(-25, 26), Main.rand.Next(-25, 26));
-                    float randomAngle = MathHelper.ToRadians(Main.rand.Next(0, 360));
-                    Vector2 velocity = new Vector2((float)Math.Cos(randomAngle), (float)Math.Sin(randomAngle)) * 5f; // 初速度为 5f
+                // **生成一条完整的蠕虫**
+                SummonCosmosGelWorm(projectile);
 
-                    Projectile.NewProjectile(
-                        projectile.GetSource_FromThis(),
-                        Main.player[projectile.owner].Center + spawnOffset,
-                        velocity,
-                        ModContent.ProjectileType<CosmosGelEater>(),
-                        (int)(projectile.damage / 0.7 * 0.45f), // 伤害为原弹幕的 45%
-                        projectile.knockBack,
-                        projectile.owner
-                    );
-                }
             }
             base.OnSpawn(projectile, source);
         }
+
+        private void SummonCosmosGelWorm(Projectile projectile)
+        {
+            Player player = Main.player[projectile.owner];
+            Vector2 spawnPos = player.Center; // 以玩家中心为起点
+
+            // **生成头部**
+            int prev = Projectile.NewProjectile(
+                projectile.GetSource_FromThis(),
+                spawnPos,
+                Vector2.Zero, // **初始速度为 0**
+                ModContent.ProjectileType<CosmosGelEater1Head>(),
+                (int)(projectile.damage / 0.7 * 0.45f), // 伤害调整
+                projectile.knockBack,
+                projectile.owner
+            );
+
+            // **生成 6 段身体**
+            for (int i = 0; i < 6; i++)
+            {
+                prev = Projectile.NewProjectile(
+                    projectile.GetSource_FromThis(),
+                    spawnPos,
+                    Vector2.Zero, // **初始速度为 0**
+                    ModContent.ProjectileType<CosmosGelEater2Body>(),
+                    (int)(projectile.damage / 0.7 * 0.45f),
+                    projectile.knockBack,
+                    projectile.owner,
+                    prev // 这里确保 `ai[0]` 继承前一部分的 UUID
+                );
+            }
+
+            // **生成尾巴**
+            Projectile.NewProjectile(
+                projectile.GetSource_FromThis(),
+                spawnPos,
+                Vector2.Zero, // **初始速度为 0**
+                ModContent.ProjectileType<CosmosGelEater3Tail>(),
+                (int)(projectile.damage / 0.7 * 0.45f),
+                projectile.knockBack,
+                projectile.owner,
+                prev // 连接最后一节身体
+            );
+        }
+
+
+        public override void Unload()
+        {
+
+
+
+        }
+  
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {

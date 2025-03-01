@@ -137,7 +137,12 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.EffulgentFeatherBullet
         {
             // 1. 给玩家添加 Buff
             Player player = Main.player[Projectile.owner];
-            player.AddBuff(ModContent.BuffType<EffulgentFeatherBulletPBuff>(), 240); // 4 秒
+
+            // **检查玩家是否已有 Buff**
+            if (!player.HasBuff(ModContent.BuffType<EffulgentFeatherBulletPBuff>()))
+            {
+                player.AddBuff(ModContent.BuffType<EffulgentFeatherBulletPBuff>(), 300); // 5 秒
+            }
 
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)

@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
 {
-    public class TenderElegyGNPC : GlobalNPC
+    public class TenderElegyBeilGNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;
         public bool hasBell = false;

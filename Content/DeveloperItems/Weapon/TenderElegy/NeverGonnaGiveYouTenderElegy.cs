@@ -7,7 +7,7 @@ using CalamityMod.UI.CalamitasEnchants;
 
 namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
 {
-    public class TenderElegyEnchantmentSystem : ModSystem
+    public class NeverGonnaGiveYouTenderElegy : ModSystem
     {
         public override void PostSetupContent()
         {

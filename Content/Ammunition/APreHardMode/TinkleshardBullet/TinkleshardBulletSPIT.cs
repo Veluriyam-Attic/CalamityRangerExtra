@@ -156,7 +156,7 @@ namespace CalamityRangerExtra.Content.Ammunition.APreHardMode.TinkleshardBullet
                     Main.rand.NextFloat(0.8f, 1.2f)
                 ).noGravity = true;
             }
-
+            Time++;
         }
 
         //public override bool OnTileCollide(Vector2 oldVelocity)

@@ -90,7 +90,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
             if (target.active)
             {
                 // **解除目标 NPC 的 `hasBell` 标记**
-                target.GetGlobalNPC<TenderElegyGNPC>().hasBell = false;
+                target.GetGlobalNPC<TenderElegyBeilGNPC>().hasBell = false;
             }
         }
     }
