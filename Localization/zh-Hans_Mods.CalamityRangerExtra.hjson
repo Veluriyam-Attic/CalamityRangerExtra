@@ -1368,6 +1368,11 @@ DeveloperItems: {
 		// TenderElegyBeil.DisplayName: Tender Elegy Beil
 		// TenderElegyPROJ.DisplayName: Tender Elegy P R O J
 		// TenderElegyBeilDamage.DisplayName: Tender Elegy Beil Damage
+
+		TenderElegyi: {
+			// DisplayName: Tender Elegyi
+			// Tooltip: ""
+		}
 	}
 }
 
@@ -1507,9 +1512,8 @@ WeaponToAMMO: {
 				DisplayName: 炸药箭
 				Tooltip:
 					'''
-					在路径上不断的往下射出火星子
-					消失时炸出一堆手榴弹，或者从玩家头顶掉下一个
-					“中世纪与现代科技的结合，尽管相对野蛮”
+					反弹并炸出火星子，反弹次数越多，炸出的越多
+					“师傅你是做什么工作的”
 					'''
 			}
 

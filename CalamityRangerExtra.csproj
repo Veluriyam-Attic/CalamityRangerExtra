@@ -104,6 +104,7 @@
 	  <None Remove="Content\DeveloperItems\Gel\魔影凝胶.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\AlloyRailgun\AlloyRailgun.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\AlloyRailgun\AlloyRailgunHold.png" />
+	  <None Remove="Content\DeveloperItems\Weapon\TenderElegy\TenderElegyi.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\TheGoldenFire\FireProj.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\TheGoldenFire\TheGoldenFire.png" />
 	  <None Remove="Content\Gel\APreHardMode\GeliticGel\GeliticGel.png" />

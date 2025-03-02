@@ -42,13 +42,12 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.TNTArrow
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.arrow = true;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = 6;
             Projectile.timeLeft = 180;
             Projectile.aiStyle = ProjAIStyleID.Arrow;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
         private bool hasHitEnemy = false; // 标记是否击中过敌人
-        private int frameCounter = 0; // 计数器
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
@@ -58,66 +57,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.TNTArrow
             }
 
 
-            frameCounter++;
-            if (frameCounter >= 15)
-            {
-                frameCounter = 0;
-
-                // 统计当前场上 TotalityFire 弹幕的数量
-                int totalityFireCount = 0;
-                for (int i = 0; i < Main.maxProjectiles; i++)
-                {
-                    if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<TotalityFire>())
-                    {
-                        totalityFireCount++;
-                    }
-                }
-
-                // 如果 TotalityFire 数量小于 30，才生成新的火焰弹幕
-                if (totalityFireCount < 30)
-                {
-                    Vector2 fireVelocity = new Vector2(0, Projectile.velocity.Length()); // 方向锁定为屏幕下方
-                    int flames = Projectile.NewProjectile(
-                        Projectile.GetSource_FromThis(),
-                        Projectile.Center,
-                        fireVelocity,
-                        ModContent.ProjectileType<TotalityFire>(),
-                        (int)(Projectile.damage * 0.3),
-                        0f,
-                        Projectile.owner
-                    );
-
-                    if (flames.WithinBounds(Main.maxProjectiles))
-                    {
-                        Projectile fireProj = Main.projectile[flames];
-                        fireProj.timeLeft = 1800; // 30秒
-                        fireProj.DamageType = DamageClass.Ranged;
-                        fireProj.penetrate = 3;
-                        fireProj.usesLocalNPCImmunity = false;
-                        fireProj.usesIDStaticNPCImmunity = true;
-                        fireProj.idStaticNPCHitCooldown = 10;
-                    }
-                }
-
-                //// 生成 Lava 粒子特效
-                //for (int i = 0; i < 10; i++)
-                //{
-                //    float angleOffset = Main.rand.NextFloat(-20f, 20f) * (MathF.PI / 180f); // 随机 ±20°
-                //    Vector2 dustVelocity = new Vector2(0, -5f).RotatedBy(angleOffset); // 绝对正上方 ±20°
-                //    int dustID = Dust.NewDust(
-                //        Projectile.position,
-                //        Projectile.width,
-                //        Projectile.height,
-                //        DustID.Lava,
-                //        dustVelocity.X,
-                //        dustVelocity.Y,
-                //        0,
-                //        default,
-                //        Main.rand.NextFloat(0.75f, 1.05f)
-                //    );
-                //    Main.dust[dustID].noGravity = true;
-                //}
-            }
+         
 
 
 
@@ -126,98 +66,6 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.TNTArrow
 
         public override void OnKill(int timeLeft)
         {
-            //// 添加新功能：在上方生成Grenade弹幕
-            //Vector2 centerPosition = Projectile.Center - new Vector2(0, 60 * 16); // 计算圆心
-            //int grenadeCount = Main.rand.Next(1, 4); // 随机生成1~3个
-            //for (int i = 0; i < grenadeCount; i++)
-            //{
-            //    // 在圆形区域随机生成点
-            //    Vector2 spawnPosition = centerPosition + Main.rand.NextVector2Circular(10 * 16, 10 * 16);
-            //    Vector2 velocity = (Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero) * 10f; // 向下坠落
-
-            //    // 生成弹幕
-            //    int grenadeProj = Projectile.NewProjectile(
-            //        Projectile.GetSource_FromThis(),
-            //        spawnPosition,
-            //        velocity,
-            //        ProjectileID.Grenade, // 33号原版Grenade弹幕
-            //        (int)(Projectile.damage * 0.3), // 伤害倍率
-            //        0f,
-            //        Projectile.owner
-            //    );
-
-            //    // 设置弹幕属性
-            //    if (grenadeProj.WithinBounds(Main.maxProjectiles))
-            //    {
-            //        Projectile proj = Main.projectile[grenadeProj];
-            //        proj.friendly = true;
-            //        proj.hostile = false;
-            //        proj.tileCollide = false;
-            //        proj.penetrate = 1;
-            //        proj.localNPCHitCooldown = 1;
-            //        proj.usesLocalNPCImmunity = true;
-            //        proj.timeLeft = 90;
-            //    }
-            //}
-
-            if (!hasHitEnemy)
-            {
-                // 未命中敌人 -> 120° 扩散射出 3~5 枚手榴弹
-                int grenadeCount = Main.rand.Next(3, 6);
-                for (int i = 0; i < grenadeCount; i++)
-                {
-                    float randomAngle = Main.rand.NextFloat(-60f, 60f) * (MathF.PI / 180f); // 120° 角度内随机
-                    Vector2 grenadeVelocity = new Vector2(0, -10f).RotatedBy(randomAngle);
-
-                    int grenadeProj = Projectile.NewProjectile(
-                        Projectile.GetSource_FromThis(),
-                        Projectile.Center,
-                        grenadeVelocity,
-                        ProjectileID.Grenade,
-                        (int)(Projectile.damage * 0.33),
-                        0f,
-                        Projectile.owner
-                    );
-
-                    if (grenadeProj.WithinBounds(Main.maxProjectiles))
-                    {
-                        Projectile proj = Main.projectile[grenadeProj];
-                        proj.friendly = true;
-                        proj.hostile = false;
-                        proj.tileCollide = false;
-                        proj.penetrate = 1;
-                        proj.localNPCHitCooldown = 1;
-                        proj.usesLocalNPCImmunity = true;
-                        proj.timeLeft = 90;
-                    }
-                }
-            }
-            else
-            {
-                // 命中过敌人 -> 玩家头顶 75 格生成静止手榴弹
-                Vector2 spawnPosition = Main.player[Projectile.owner].Center - new Vector2(0, 75 * 16);
-
-                int grenadeProj = Projectile.NewProjectile(
-                    Projectile.GetSource_FromThis(),
-                    spawnPosition,
-                    Vector2.Zero, // 初始速度 0
-                    ProjectileID.Grenade,
-                    (int)(Projectile.damage * 1.25), // 1.25 倍伤害
-                    0f,
-                    Projectile.owner
-                );
-
-                if (grenadeProj.WithinBounds(Main.maxProjectiles))
-                {
-                    Projectile proj = Main.projectile[grenadeProj];
-                    proj.friendly = true;
-                    proj.hostile = true; // 造成敌我双方伤害
-                    proj.tileCollide = false;
-                    proj.penetrate = 1;
-                    proj.timeLeft = 600;
-                }
-            }
-
             Projectile.ExpandHitboxBy(32);
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             for (int j = 0; j < 5; j++)
@@ -300,10 +148,61 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.TNTArrow
                 }
             }
         }
+        private int totalityFireCount = 3; // 初始发射 3 个火焰弹幕
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            // 反弹逻辑
+            if (Projectile.velocity.X != oldVelocity.X) Projectile.velocity.X = -oldVelocity.X; // 反弹 X 方向
+            if (Projectile.velocity.Y != oldVelocity.Y) Projectile.velocity.Y = -oldVelocity.Y; // 反弹 Y 方向
+
+            // 每次反弹减少穿透次数
+            Projectile.penetrate--;
+            if (Projectile.penetrate <= 0)
+            {
+                Projectile.Kill(); // 穿透次数耗尽则销毁
+                return false;
+            }
+
+            // 播放爆炸音效
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+
+            // 在原地生成一颗手榴弹（保持原属性）
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileID.Grenade, (int)(Projectile.damage * 0.3), 0f, Projectile.owner);
+
+            // 生成 TotalityFire
+            for (int i = 0; i < totalityFireCount; i++)
+            {
+                Vector2 fireVelocity = Main.rand.NextVector2Unit() * Main.rand.NextFloat(2f, 5f); // 随机方向
+                int flames = Projectile.NewProjectile(
+                    Projectile.GetSource_FromThis(),
+                    Projectile.Center,
+                    fireVelocity,
+                    ModContent.ProjectileType<TotalityFire>(),
+                    (int)(Projectile.damage * 0.3),
+                    0f,
+                    Projectile.owner
+                );
+
+                if (flames.WithinBounds(Main.maxProjectiles))
+                {
+                    Main.projectile[flames].DamageType = DamageClass.Ranged;
+                    Main.projectile[flames].penetrate = 3;
+                    Main.projectile[flames].usesLocalNPCImmunity = false;
+                    Main.projectile[flames].usesIDStaticNPCImmunity = true;
+                    Main.projectile[flames].idStaticNPCHitCooldown = 10;
+                }
+            }
+
+            // 每次反弹增加 TotalityFire 发射数量
+            totalityFireCount++;
+
+            return false; // 不销毁弹幕，而是让其继续存活
+        }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            hasHitEnemy = true; // 记录命中过敌人
+
         }
     }
 }

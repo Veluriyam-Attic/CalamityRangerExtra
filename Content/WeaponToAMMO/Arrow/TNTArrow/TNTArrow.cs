@@ -22,7 +22,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.TNTArrow
         public new string LocalizationCategory => "WeaponToAMMO.Arrow.TNTArrow";
         public override void SetDefaults()
         {
-            Item.damage = 16;
+            Item.damage = 10;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 14;
             Item.height = 32;
