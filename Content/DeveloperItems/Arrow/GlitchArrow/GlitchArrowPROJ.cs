@@ -24,11 +24,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Arrow.GlitchArrow
         private int textureIndex = 1; // 存储当前的随机贴图索引
         private Color randomColor = Color.White; // 存储随机颜色
         private int movementTimer = 3; // 控制抖动的计时器
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 1;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
-        }
+
 
         public override void SetDefaults()
         {
@@ -106,25 +102,33 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Arrow.GlitchArrow
 
         public override bool PreDraw(ref Color lightColor)
         {
-            SpriteBatch spriteBatch = Main.spriteBatch;
+            //SpriteBatch spriteBatch = Main.spriteBatch;
 
-            // 检查 textureIndex 是否有效
-            if (textureIndex < 1 || textureIndex > 1021) // 合法范围为 1 到 1021
-            {
-                textureIndex = 1; // 设置为默认值，避免错误
-            }
+            //// 检查 textureIndex 是否有效
+            //if (textureIndex < 1 || textureIndex > 1021) // 合法范围为 1 到 1021
+            //{
+            //    textureIndex = 1; // 设置为默认值，避免错误
+            //}
 
-            Texture2D texture = ModContent.Request<Texture2D>($"Terraria/Images/Projectile_{textureIndex}").Value;
+            //Texture2D texture = ModContent.Request<Texture2D>($"Terraria/Images/Projectile_{textureIndex}").Value;
 
-            Vector2 drawOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-            Vector2 drawPosition = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+            //Vector2 drawOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+            //Vector2 drawPosition = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 
-            // 使用新的随机颜色绘制
-            spriteBatch.Draw(texture, drawPosition, null, randomColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            //// 使用新的随机颜色绘制
+            //spriteBatch.Draw(texture, drawPosition, null, randomColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
+            //return false;
+
+
+            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
             return false;
         }
-
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 1;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             // 随机添加 3~7 种随机 Buff

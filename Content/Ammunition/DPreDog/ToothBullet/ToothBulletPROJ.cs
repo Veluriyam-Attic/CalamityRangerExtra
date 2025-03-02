@@ -167,17 +167,31 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.ToothBullet
                 Vector2 lineStart = Projectile.Center - lineDirection * 2.5f * 16f; // 起点
                 Vector2 lineEnd = Projectile.Center + lineDirection * 2.5f * 16f;  // 终点
 
+                // 计算命中点 -> 特效方向（标准化）
+                Vector2 attackDirection = (Projectile.Center - lineStart).SafeNormalize(Vector2.Zero);
+
+                // 计算特效排列的平行方向（即和特效排列线一致）
+                Vector2 parallelDirection = lineDirection; // 保持平行
+
                 // 在线正上方和正下方生成 5 个尖刺特效
                 for (int offset = -1; offset <= 1; offset += 2) // 上下两个方向
                 {
+                    // **设置两排特效的相反方向，并分别旋转 90°**
+                    Vector2 effectDirection = (offset == 1) ?
+                        attackDirection.RotatedBy(-MathHelper.PiOver2) :
+                        attackDirection.RotatedBy(MathHelper.PiOver2);
+
                     for (int i = 0; i < 5; i++) // 每个方向生成 5 个尖刺
                     {
                         float progress = i / 4f; // 计算粒子位置比例
-                        Vector2 particlePosition = Vector2.Lerp(lineStart, lineEnd, progress) + lineDirection.RotatedBy(MathHelper.PiOver2 * offset) * 2 * 16f;
+                        Vector2 particlePosition = Vector2.Lerp(lineStart, lineEnd, progress) + parallelDirection.RotatedBy(MathHelper.PiOver2 * offset) * 2 * 16f;
+
+                        // **特效速度（相反方向 + 额外 90° 旋转）**
+                        Vector2 particleVelocity = effectDirection * Main.rand.NextFloat(3f, 6f);
 
                         PointParticle spark = new PointParticle(
                             particlePosition,
-                            lineDirection * Main.rand.NextFloat(3f, 6f), // 速度朝向虚拟线方向
+                            particleVelocity, // 速度统一，但每排方向相反 + 90° 旋转
                             false,
                             30,
                             1.5f,
@@ -186,6 +200,9 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.ToothBullet
                         GeneralParticleHandler.SpawnParticle(spark);
                     }
                 }
+
+
+
             }
         }
 

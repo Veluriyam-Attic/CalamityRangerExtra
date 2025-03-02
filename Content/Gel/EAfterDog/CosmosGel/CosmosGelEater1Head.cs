@@ -26,7 +26,7 @@ namespace CalamityRangerExtra.Content.Gel.EAfterDog.CosmosGel
             Projectile.height = 20;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 1;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 600;
             Projectile.alpha = 0;

@@ -38,6 +38,7 @@ using CalamityRangerExtra.Content.Gel.EAfterDog.AuricGel;
 using CalamityRangerExtra.Content.Gel.EAfterDog.CosmosGel;
 using CalamityRangerExtra.Content.Gel.EAfterDog.MiracleMatterGel;
 using CalamityRangerExtra.Content.Gel.CPreMoodLord.PlagueGel;
+using CalamityMod.Projectiles.Ranged;
 #endregion
 
 namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
@@ -344,10 +345,16 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
         {
             if (player.PickAmmo(player.HeldItem, out _, out _, out _, out _, out int ammoType))
             {
+                // 如果使用的是 AstralGel，则强制转换为 PlanetaryAnnihilationProj
+                if (ammoType == ModContent.ItemType<AstralGel>())
+                {
+                    type = ModContent.ProjectileType<PlanetaryAnnihilationProj>();
+                }
+
                 // 获取对应的颜色
                 if (!GelColors.TryGetValue(ammoType, out Color fireColor))
                 {
-                    fireColor = Color.Gold; // 默认白色
+                    fireColor = Color.Gold; // 默认颜色
                 }
 
                 // 发射火焰弹幕并传递颜色

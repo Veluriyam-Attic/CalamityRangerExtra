@@ -31,9 +31,9 @@ namespace CalamityRangerExtra.Content.Gel.APreHardMode.AerialiteGel
             Projectile.hostile = false;
             Projectile.timeLeft = 300;
             Projectile.Opacity = 0f;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 1;
             Projectile.usesIDStaticNPCImmunity = true; // 开启静态NPC击中冷却
-            Projectile.idStaticNPCHitCooldown = -1; // 每6帧可击中一次相同NPC
+            Projectile.idStaticNPCHitCooldown = 300; // 每300帧可击中一次相同NPC
         }
 
         private bool hasStruckLightning = false; // 记录是否已生成闪电

@@ -21,7 +21,7 @@ namespace CalamityRangerExtra.Content.Gel.EAfterDog.CosmosGel
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 1;
             Projectile.alpha = 0;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.usesLocalNPCImmunity = true;

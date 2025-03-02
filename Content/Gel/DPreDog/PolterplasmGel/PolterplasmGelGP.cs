@@ -32,21 +32,22 @@ namespace CalamityRangerExtra.Content.Gel.DPreDog.PolterplasmGel
             if (IsPolterplasmGelInfused && target.active && !target.friendly)
             {
                 // 禁用追踪逻辑
-                canTrack = false;
+                projectile.ai[2] = 1f; // 标记不再追踪
+
             }
         }
-        private bool canTrack = true; // 初始状态允许追踪
         public override void AI(Projectile projectile)
         {
             if (IsPolterplasmGelInfused)
             {
-                // 前30帧不追踪
-                if (projectile.ai[1] <= 1 )
+                if (projectile.ai[1] <= 1)
                 {
                     projectile.ai[1]++;
                     return;
                 }
-                if(canTrack)
+
+                // 只有在 `ai[2] == 0` 时才追踪，确保击中敌人后不会继续追踪
+                if (projectile.ai[2] == 0)
                 {
                     // 查找目标
                     NPC target = projectile.Center.ClosestNPCAt(1050); // 在1050像素范围内寻找最近的敌人

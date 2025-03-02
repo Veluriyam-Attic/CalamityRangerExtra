@@ -36,6 +36,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 14;
             Projectile.ignoreWater = true;
+            Projectile.tileCollide = false;
             Projectile.arrow = true;
             Projectile.extraUpdates = 1;
         }

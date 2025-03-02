@@ -147,37 +147,37 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.EffulgentFeatherBullet
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
-                // ⚡ 在目标位置生成一条随机方向的闪电线
-                // 设置闪电的起点
-                Vector2 startPoint = target.Center;
+                //// ⚡ 在目标位置生成一条随机方向的闪电线
+                //// 设置闪电的起点
+                //Vector2 startPoint = target.Center;
 
-                // 随机生成方向和长度
-                float randomDirection = Main.rand.NextFloat(0f, MathHelper.TwoPi); // 随机生成一个 0 到 2π 的方向
-                float randomLength = Main.rand.NextFloat(10f, 20f) * 16f; // 随机长度为 10 到 20 tile
-                Vector2 endPoint = startPoint + new Vector2((float)Math.Cos(randomDirection), (float)Math.Sin(randomDirection)) * randomLength;
+                //// 随机生成方向和长度
+                //float randomDirection = Main.rand.NextFloat(0f, MathHelper.TwoPi); // 随机生成一个 0 到 2π 的方向
+                //float randomLength = Main.rand.NextFloat(10f, 20f) * 16f; // 随机长度为 10 到 20 tile
+                //Vector2 endPoint = startPoint + new Vector2((float)Math.Cos(randomDirection), (float)Math.Sin(randomDirection)) * randomLength;
 
-                // 在起点到终点之间生成粒子效果
-                int particleCount = Main.rand.Next(10, 15); // 随机粒子数量
-                for (int j = 0; j < particleCount; j++)
-                {
-                    // 根据进度插值计算每个粒子的位置，增加随机偏移
-                    float progress = j / (float)(particleCount - 1);
-                    Vector2 position = Vector2.Lerp(startPoint, endPoint, progress) + Main.rand.NextVector2Circular(4f, 4f); // 增加随机偏移
+                //// 在起点到终点之间生成粒子效果
+                //int particleCount = Main.rand.Next(10, 15); // 随机粒子数量
+                //for (int j = 0; j < particleCount; j++)
+                //{
+                //    // 根据进度插值计算每个粒子的位置，增加随机偏移
+                //    float progress = j / (float)(particleCount - 1);
+                //    Vector2 position = Vector2.Lerp(startPoint, endPoint, progress) + Main.rand.NextVector2Circular(4f, 4f); // 增加随机偏移
 
-                    // 随机选择粒子类型
-                    int dustType = Main.rand.NextBool() ? DustID.Electric : DustID.BlueTorch;
+                //    // 随机选择粒子类型
+                //    int dustType = Main.rand.NextBool() ? DustID.Electric : DustID.BlueTorch;
 
-                    // 创建粒子特效
-                    Dust dust = Dust.NewDustPerfect(
-                        position,
-                        dustType,
-                        Main.rand.NextVector2Circular(1f, 1f), // 粒子微小速度偏移
-                        150,
-                        default,
-                        Main.rand.NextFloat(1.2f, 1.8f) // 粒子大小随机
-                    );
-                    dust.noGravity = true; // 禁用重力
-                }
+                //    // 创建粒子特效
+                //    Dust dust = Dust.NewDustPerfect(
+                //        position,
+                //        dustType,
+                //        Main.rand.NextVector2Circular(1f, 1f), // 粒子微小速度偏移
+                //        150,
+                //        default,
+                //        Main.rand.NextFloat(1.2f, 1.8f) // 粒子大小随机
+                //    );
+                //    dust.noGravity = true; // 禁用重力
+                //}
             }
 
             // 检查当前场上的 EffulgentFeatherBulletAREA 数量
