@@ -19,7 +19,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
                 {
                     // 只有击败了 ExoMechs 和 Calamitas 之后，才能将 Phangasm 转化为 TenderElegy
                     //if (DownedBossSystem.downedExoMechs && DownedBossSystem.downedCalamitas)
-                    if (DownedBossSystem.downedExoMechs)
+                    //if (DownedBossSystem.downedExoMechs)
                     {
                             EnchantmentManager.ItemUpgradeRelationship[ModContent.ItemType<Phangasm>()] = ModContent.ItemType<TenderElegy>();
                     }

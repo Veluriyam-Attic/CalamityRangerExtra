@@ -27,8 +27,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
         public override void SetDefaults()
         {
             // 设置弹幕的基础属性
-            Projectile.width = 11;
-            Projectile.height = 24;
+            Projectile.width = Projectile.height = 24;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
@@ -140,6 +139,24 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
 
                 Main.projectile[proj].ai[0] = target.whoAmI;
                 npcGlobal.hasBell = true;
+            }
+
+
+            // 生成类似 MagnomalyRocket 命中时的粒子特效
+            int dustType = Main.rand.NextBool() ? 107 : 234;
+            if (Main.rand.NextBool(4))
+            {
+                dustType = 269;
+            }
+
+            for (int i = 0; i < 20; i++) // 生成 X 个粒子
+            {
+                Vector2 spawnPos = target.Center + Main.rand.NextVector2Circular(32f, 32f); // 以目标中心为圆心，半径 32 像素内随机生成
+                Vector2 velocity = Main.rand.NextVector2Unit() * Main.rand.NextFloat(1f, 3f); // 随机方向，随机速度
+
+                int dust = Dust.NewDust(spawnPos, 0, 0, dustType, velocity.X, velocity.Y, 100, default, Main.rand.NextFloat(1.7f, 2.2f));
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = true;
             }
         }
 

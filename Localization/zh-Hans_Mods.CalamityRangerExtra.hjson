@@ -1679,7 +1679,7 @@ Projectile: {
 		PrismArrowPROJ.DisplayName: 棱晶箭
 		AerialiteGelCloud.DisplayName: 筋斗云
 		HurricaneGelSplit.DisplayName: 水晶碎片
-		// BloodBeadsArrowPROJ.DisplayName: Blood Beads Arrow P R O J
+		// BloodBeadsArrowPROJ.DisplayName: Blood Beads Arrow
 	}
 
 	BPrePlantera: {
