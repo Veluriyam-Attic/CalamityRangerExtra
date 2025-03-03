@@ -47,15 +47,5 @@ namespace CalamityRangerExtra
             base.ModifyHitByProjectile(npc, projectile, ref modifiers);
         }
 
-
-
-
-
-
-
-
-
-
-
     }
 }

@@ -141,7 +141,6 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
                 npcGlobal.hasBell = true;
             }
 
-
             // 生成类似 MagnomalyRocket 命中时的粒子特效
             int dustType = Main.rand.NextBool() ? 107 : 234;
             if (Main.rand.NextBool(4))
