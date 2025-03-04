@@ -14,6 +14,7 @@ using CalamityRangerExtra.CREConfigs;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.PerennialBullet
 {

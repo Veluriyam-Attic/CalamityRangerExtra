@@ -112,6 +112,7 @@
 	  <None Remove="Content\Gel\CPreMoodLord\PlagueGel\PlagueGelEDebuff.png" />
 	  <None Remove="Content\Gel\DPreDog\ToothGel\ToothGel.png" />
 	  <None Remove="Content\WeaponToAMMO\Arrow\EtherealArrow\EtherealArrow.png" />
+	  <None Remove="Content\WeaponToAMMO\Arrow\EtherealArrow\灭灵箭.txt" />
 	  <None Remove="Content\WeaponToAMMO\Arrow\MonstrousArrow\1111.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\ShadowsArrow\闪光金羽弃用贴图.png" />
 	  <None Remove="Content\WeaponToAMMO\Arrow\MonstrousArrow\MonstrousArrow.png" />
@@ -172,6 +173,7 @@
 	  <None Remove="Content\WeaponToAMMO\Arrow\TNTArrow\炸药箭.txt" />
 	  <None Remove="Content\WeaponToAMMO\Bullet\AdamantiteAcceleratorBullet\AdamantiteAcceleratorBullet.png" />
 	  <None Remove="Content\WeaponToAMMO\Bullet\AdamantiteAcceleratorBullet\ParticleAccelerator.png" />
+	  <None Remove="Content\WeaponToAMMO\Bullet\AdamantiteAcceleratorBullet\加速子弹盒.txt" />
 	  <None Remove="Content\WeaponToAMMO\Bullet\ApoctosisMagicBullet\11.png" />
 	  <None Remove="Content\WeaponToAMMO\Bullet\ApoctosisMagicBullet\ApoctosisMagicBullet.png" />
 	  <None Remove="Content\WeaponToAMMO\Bullet\ApoctosisMagicBullet\ApoctosisMagicBulletPROJ.png" />

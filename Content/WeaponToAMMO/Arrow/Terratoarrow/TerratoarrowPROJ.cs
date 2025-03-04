@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using Terraria;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Ranged;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.Terratoarrow
 {
@@ -135,8 +136,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.Terratoarrow
 
         public override void OnKill(int timeLeft)
         {
-
-
+            LightingBoltsSystem.Spawn_AncientForestWisdom(Projectile.Center);
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

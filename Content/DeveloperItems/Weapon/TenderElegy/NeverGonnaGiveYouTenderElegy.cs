@@ -21,7 +21,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
                     //if (DownedBossSystem.downedExoMechs && DownedBossSystem.downedCalamitas)
                     //if (DownedBossSystem.downedExoMechs)
                     {
-                            EnchantmentManager.ItemUpgradeRelationship[ModContent.ItemType<Phangasm>()] = ModContent.ItemType<TenderElegyi>();
+                            EnchantmentManager.ItemUpgradeRelationship[ModContent.ItemType<TenderElegyi>()] = ModContent.ItemType<TenderElegy>();
                     }
                 }
             }

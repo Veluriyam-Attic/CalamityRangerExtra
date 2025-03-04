@@ -12,6 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework.Graphics;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.EtherealArrow
 {
@@ -106,7 +107,10 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Arrow.EtherealArrow
                     break;
             }
         }
-
+        public override void OnKill(int timeLeft)
+        {
+            LightingBoltsSystem.Spawn_SpectralWhispers(Projectile.Center);
+        }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];

@@ -14,7 +14,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TenderElegy
         public new string LocalizationCategory => "DeveloperItems.TenderElegy";
         public override void SetStaticDefaults()
         {
-            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<Phangasm>();
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TenderElegyi>();
         }
         public override void SetDefaults()
         {

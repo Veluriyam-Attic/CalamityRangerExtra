@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.ModLoader;
 using System;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.PerennialBullet
 {
@@ -63,6 +64,7 @@ namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.PerennialBullet
                     );
                     dust.noGravity = true; // 粒子不受重力影响
                 }
+                LightingBoltsSystem.Spawn_FlowerPattern(Player.Center);
 
                 // 重置调用计数器
                 increaseStackCountCalls = 0;

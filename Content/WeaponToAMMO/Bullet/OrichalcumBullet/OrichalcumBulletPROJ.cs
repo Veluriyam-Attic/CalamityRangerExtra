@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 using CalamityRangerExtra.CREConfigs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.OrichalcumBullet
 {
@@ -77,43 +78,66 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.OrichalcumBullet
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            // 花瓣弹幕逻辑
-            for (int i = 0; i < 2; i++)
+            // 触发额外的花瓣弹幕，每次击中生成 2 个
+            int petalCount = 2;
+            for (int i = 0; i < petalCount; i++)
             {
-                int direction = Main.player[Projectile.owner].direction;
-                float xStart = Main.screenPosition.X;
-                if (direction < 0)
-                    xStart += Main.screenWidth;
-                float yStart = Main.screenPosition.Y + Main.rand.Next(Main.screenHeight);
-                Vector2 startPos = new Vector2(xStart, yStart);
-                Vector2 pathToTravel = target.Center - startPos;
-                pathToTravel.X += Main.rand.NextFloat(-50f, 50f) * 0.1f;
-                pathToTravel.Y += Main.rand.NextFloat(-50f, 50f) * 0.1f;
-                float speedMult = 24f / pathToTravel.Length();
-                pathToTravel *= speedMult;
-                //int petal = Projectile.NewProjectile(Projectile.GetSource_FromThis(), startPos, pathToTravel, ProjectileID.FlowerPetal, (int)((damageDone) * 0.55), 0f, Projectile.owner);
-                int petal = Projectile.NewProjectile(Projectile.GetSource_FromThis(), startPos, pathToTravel, ProjectileID.FlowerPetal, (int)(Projectile.damage * 0.75), 0f, Projectile.owner);
-                if (petal.WithinBounds(Main.maxProjectiles))
-                    Main.projectile[petal].DamageType = DamageClass.Ranged; // 改为射手类伤害
+                Player player = Main.player[Projectile.owner];
+
+                // 确定弹幕生成位置（屏幕左侧或右侧的随机高度）
+                float spawnX = player.direction > 0 ? Main.screenPosition.X : Main.screenPosition.X + Main.screenWidth;
+                float spawnY = Main.screenPosition.Y + Main.rand.Next(Main.screenHeight);
+                Vector2 spawnPosition = new Vector2(spawnX, spawnY);
+
+                // 计算花瓣弹幕的目标方向（目标敌人的中心）
+                Vector2 trajectory = target.Center - spawnPosition;
+
+                // 添加随机偏移量，让轨迹更自然
+                trajectory.X += Main.rand.NextFloat(-5f, 5f);
+                trajectory.Y += Main.rand.NextFloat(-5f, 5f);
+
+                // 归一化速度，使弹幕总是以 24 像素/帧的速度前进
+                float speedMultiplier = 24f / trajectory.Length();
+                trajectory *= speedMultiplier;
+
+                // 生成花瓣弹幕，伤害值是当前弹幕伤害的 75%
+                int petalProjectileID = Projectile.NewProjectile(
+                    Projectile.GetSource_FromThis(),
+                    spawnPosition, trajectory,
+                    ProjectileID.FlowerPetal,
+                    (int)(Projectile.damage * 0.75), 0f, Projectile.owner
+                );
+
+                // 确保新生成的弹幕计算为远程伤害
+                if (petalProjectileID.WithinBounds(Main.maxProjectiles))
+                    Main.projectile[petalProjectileID].DamageType = DamageClass.Ranged;
             }
 
-            // 粒子特效：正方形弹开
-            for (int i = 0; i < 4; i++)
+
+
+            // 检查是否启用了特效
+            if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
-                Vector2 offset = i switch
+                LightingBoltsSystem.Spawn_BlossomPathIndicator(Projectile.Center, Main.player[Projectile.owner]);
+
+                // 粒子特效：正方形弹开
+                for (int i = 0; i < 4; i++)
                 {
-                    0 => new Vector2(-1, -1), // 左上
-                    1 => new Vector2(1, -1),  // 右上
-                    2 => new Vector2(1, 1),   // 右下
-                    _ => new Vector2(-1, 1),  // 左下
-                };
-                Dust dust = Dust.NewDustPerfect(
-                    target.Center + offset * 20f, // 粒子起点偏移
-                    i % 2 == 0 ? 145 : 69,       // 使用交替的粒子 ID
-                    offset * Main.rand.NextFloat(1f, 2f) // 偏移方向和速度
-                );
-                dust.noGravity = true; // 粒子无重力
-                dust.scale = Main.rand.NextFloat(1f, 1.5f); // 粒子缩放大小
+                    Vector2 offset = i switch
+                    {
+                        0 => new Vector2(-1, -1), // 左上
+                        1 => new Vector2(1, -1),  // 右上
+                        2 => new Vector2(1, 1),   // 右下
+                        _ => new Vector2(-1, 1),  // 左下
+                    };
+                    Dust dust = Dust.NewDustPerfect(
+                        target.Center + offset * 20f, // 粒子起点偏移
+                        i % 2 == 0 ? 145 : 69,       // 使用交替的粒子 ID
+                        offset * Main.rand.NextFloat(1f, 2f) // 偏移方向和速度
+                    );
+                    dust.noGravity = true; // 粒子无重力
+                    dust.scale = Main.rand.NextFloat(1f, 1.5f); // 粒子缩放大小
+                }
             }
         }
 

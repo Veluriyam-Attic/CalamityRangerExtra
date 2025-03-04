@@ -40,7 +40,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.AdamantiteAcceleratorB
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 2; // 根据模式设置穿透次数
-            Projectile.timeLeft = 150;
+            Projectile.timeLeft = 300;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;

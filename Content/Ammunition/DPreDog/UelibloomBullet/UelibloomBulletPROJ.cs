@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 using CalamityRangerExtra.CREConfigs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Ammunition.DPreDog.UelibloomBullet
 {
@@ -115,6 +116,8 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.UelibloomBullet
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
+                LightingBoltsSystem.Spawn_GreenShimmerPath(Projectile.Center, Main.player[Projectile.owner]);
+
                 // 创建叶子形状的粒子特效
                 int leafCount = 12; // 每个叶子的粒子数量
                 float leafLength = 8 * 16f; // 叶子的长度
