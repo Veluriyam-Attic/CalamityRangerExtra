@@ -288,10 +288,38 @@ namespace CalamityRangerExtra.LightingBolts
             }
         }
 
+        private static ParticlePool<GasParticle> _poolGas = new ParticlePool<GasParticle>(100, () => new GasParticle());
+        public static void Spawn_ExpandingOrangeRing(Vector2 position)
+        {
+            int particleCount = 12; // 生成 12 个粒子，围绕成环
+            float initialRadius = 32f; // 初始随机范围半径（2×16）
+            float expansionSpeed = 0.5f; // 扩散速度
+            float lifetime = 60; // 粒子存活时间
 
+            // 颜色：橘黄色
+            Color orangeColor = new Color(1f, 0.6f, 0.2f, 1f);
 
+            for (int i = 0; i < particleCount; i++)
+            {
+                // 计算粒子的初始位置，在 `2×16` 半径内随机生成
+                Vector2 randomOffset = Main.rand.NextVector2Circular(initialRadius, initialRadius);
+                Vector2 spawnPos = position + randomOffset;
 
+                // 计算扩散方向（从 `spawnPos` 指向 `position` 的外部）
+                Vector2 expansionDirection = (spawnPos - position).SafeNormalize(Vector2.Zero) * expansionSpeed;
 
+                // 创建粒子
+                GasParticle gasParticle = _poolGas.RequestParticle();
+                gasParticle.AccelerationPerFrame = Vector2.Zero;
+                gasParticle.Velocity = expansionDirection; // 让粒子向外扩散
+                gasParticle.ColorTint = orangeColor;
+                gasParticle.LocalPosition = spawnPos;
+                gasParticle.TimeToLive = (int)(lifetime * Main.rand.NextFloat(0.8f, 1.2f)); // 让不同粒子的存活时间稍有不同
+                gasParticle.InitialScale = 1f + Main.rand.NextFloat() * 0.3f; // 让不同粒子的大小稍有变化
+
+                Main.ParticleSystem_World_BehindPlayers.Add(gasParticle);
+            }
+        }
 
     }
 }

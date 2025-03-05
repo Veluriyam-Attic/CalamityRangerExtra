@@ -9,6 +9,7 @@ using CalamityMod.Particles;
 using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Typeless;
 using CalamityRangerExtra.CREConfigs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.ScoriaBullet
 {
@@ -121,6 +122,8 @@ namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.ScoriaBullet
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
+                LightingBoltsSystem.Spawn_ExpandingOrangeRing(Projectile.Center);
+
                 // 抛射橙色粒子特效
                 int particleCount = Main.rand.Next(10, 16); // 随机生成 10 到 15 个粒子
                 for (int i = 0; i < particleCount; i++)
