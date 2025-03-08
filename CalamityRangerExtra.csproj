@@ -8,6 +8,9 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Remove="LightingBolts\Shader\FirstShader.fx" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Remove="Content\Ammunition\AAA示范弹幕（方便复制用）.txt" />
 	  <None Remove="Content\Ammunition\APreHardMode\AerialiteBullet\AerialiteBullet.png" />
 	  <None Remove="Content\Ammunition\APreHardMode\AerialiteBullet\AerialiteBulletEBuff.png" />
@@ -265,6 +268,10 @@
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶.png" />
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶_DeBuff.png" />
 	  <None Remove="LightingBolts\Metaballs\ShadowAmmoLayer.png" />
+	  <None Remove="LightingBolts\Shader\FirstShader.fx" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="LightingBolts\Shader\FirstShader.fx" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="CalamityMod">
@@ -277,6 +284,7 @@
 	  <Folder Include="Content\DeveloperItems\Gel\新文件夹\" />
 	  <Folder Include="Content\DeveloperItems\Weapon\Pyroblast\新文件夹\" />
 	  <Folder Include="Content\DeveloperItems\Weapon\新文件夹\" />
+	  <Folder Include="LightingBolts\Shader\FXandXNB\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Build.Framework" Version="17.12.6" />

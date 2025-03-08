@@ -11,6 +11,9 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using CalamityRangerExtra.CREConfigs;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.ApoctosisMagicBullet
 {
@@ -30,6 +33,36 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.ApoctosisMagicBullet
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
             return false;
         }
+
+        public override void PostDraw(Color lightColor)
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+            // 获取 Shader
+            var shader = GameShaders.Misc["CalamityRangerExtra:FirstShader"];
+            shader.UseOpacity(0.8f);
+            shader.Apply();
+
+            // 修正偏移（直角除以2）
+            Vector2 drawOrigin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
+
+            Main.spriteBatch.Draw(
+                TextureAssets.Projectile[Projectile.type].Value,
+                Projectile.Center - Main.screenPosition,
+                null,
+                Color.White,
+                Projectile.rotation,
+                drawOrigin,
+                1f,
+                SpriteEffects.None,
+                0f
+            );
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin();
+        }
+
 
         public override void SetDefaults()
         {
