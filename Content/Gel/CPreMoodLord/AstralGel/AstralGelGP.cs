@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire;
 
 namespace CalamityRangerExtra.Content.Gel.CPreMoodLord.AstralGel
 {
@@ -23,6 +24,9 @@ namespace CalamityRangerExtra.Content.Gel.CPreMoodLord.AstralGel
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
+            if (projectile.type == ModContent.ProjectileType<TheGoldenFirePROJAG>())
+                return; // 直接返回，不对这个弹幕进行修改
+
             if (source is EntitySource_ItemUse_WithAmmo ammoSource && ammoSource.AmmoItemIdUsed == ModContent.ItemType<AstralGel>())
             {
                 IsAstralGelInfused = true;

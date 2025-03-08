@@ -345,10 +345,10 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
         {
             if (player.PickAmmo(player.HeldItem, out _, out _, out _, out _, out int ammoType))
             {
-                // 如果使用的是 AstralGel，则强制转换为 PlanetaryAnnihilationProj
+                // 如果使用的是 AstralGel，则强制转换为 TheGoldenFirePROJAG【特殊情况特殊对待】
                 if (ammoType == ModContent.ItemType<AstralGel>())
                 {
-                    type = ModContent.ProjectileType<PlanetaryAnnihilationProj>();
+                    type = ModContent.ProjectileType<TheGoldenFirePROJAG>();
                 }
 
                 // 获取对应的颜色

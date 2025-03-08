@@ -110,13 +110,15 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.penetrate = -1; // 无限穿透
-            Projectile.timeLeft = 200;
+            Projectile.penetrate = 6; // 无限穿透
+            Projectile.timeLeft = 250;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-            Projectile.extraUpdates = 5; // 增加更新次数
+            Projectile.extraUpdates = 4; // 增加更新次数
             Projectile.arrow = true;
             Projectile.alpha = 255;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 1;
         }
 
         public override void AI()
@@ -156,52 +158,12 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
                 GeneralParticleHandler.SpawnParticle(pulse);
             }
         }
-        private void SplitProjectile()
-        {
-            int splitCount = Main.rand.Next(2, 5); // 随机生成 2 到 4 个弹幕
-
-            for (int i = 0; i < splitCount; i++)
-            {
-                float angle = MathHelper.ToRadians(Main.rand.Next(-10, 11));
-                Vector2 newVelocity = Projectile.velocity.RotatedBy(angle) * 0.9f;
-
-                int randomType = Main.rand.Next(3); // 随机选择 0-原版弹幕, 1-CalamityMod, 2-自定义模组弹幕
-                if (randomType == 0)
-                {
-                    // 原版弹幕
-                    int selectedVanilla = VanillaProjectiles[Main.rand.Next(VanillaProjectiles.Length)];
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, newVelocity, selectedVanilla, (Projectile.damage) * 5, Projectile.knockBack, Projectile.owner);
-                }
-                else if (randomType == 1)
-                {
-                    // Calamity 弹幕
-                    int selectedCalamity = CalamityProjectiles[Main.rand.Next(CalamityProjectiles.Length)];
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, newVelocity, selectedCalamity, (Projectile.damage) * 5, Projectile.knockBack, Projectile.owner);
-                }
-                else
-                {
-                    // 自定义模组弹幕
-                    string selectedProjectile = CustomModProjectiles[Main.rand.Next(CustomModProjectiles.Length)];
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, newVelocity, Mod.Find<ModProjectile>(selectedProjectile).Type, (Projectile.damage) * 5, Projectile.knockBack, Projectile.owner);
-                }
-
-                // 黑色粒子效果
-                for (int j = 0; j < 3; j++)
-                {
-                    Vector2 particleVelocity = newVelocity.RotatedBy(MathHelper.ToRadians(15 * (j % 2 == 0 ? 1 : -1))) * Main.rand.NextFloat(1f, 2.6f);
-                    Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Smoke, particleVelocity, 0, Color.Black, Main.rand.NextFloat(0.9f, 1.6f));
-                    dust.noGravity = true;
-                }
-            }
-        }
-
-
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            // 计算发射位置（命中点的左前方 & 右前方 2×16）
-            Vector2 leftPos = target.Center + Projectile.velocity.RotatedBy(MathHelper.PiOver4) * 32f;
-            Vector2 rightPos = target.Center + Projectile.velocity.RotatedBy(-MathHelper.PiOver4) * 32f;
+            // 计算发射位置（命中点的左前方 & 右前方 X）
+            Vector2 leftPos = target.Center + Projectile.velocity.RotatedBy(MathHelper.PiOver4) * 3f;
+            Vector2 rightPos = target.Center + Projectile.velocity.RotatedBy(-MathHelper.PiOver4) * 3f;
 
             // 获取随机弹幕类型
             int randomType;
@@ -220,20 +182,20 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), rightPos, Projectile.velocity, randomType, (int)(Projectile.damage * 0.75f), Projectile.knockBack, Projectile.owner);
 
             // 生成黑色粒子特效
-            int particleCount = Main.rand.Next(3, 6);
-            for (int i = 0; i < particleCount; i++)
-            {
-                Vector2 direction = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(15)) * Main.rand.NextFloat(0.5f, 1.5f);
-                Dust dust = Dust.NewDustPerfect(
-                    target.Center,
-                    DustID.ShadowbeamStaff,
-                    direction,
-                    0,
-                    Color.Black,
-                    Main.rand.NextFloat(1f, 1.5f)
-                );
-                dust.noGravity = true;
-            }
+            //int particleCount = Main.rand.Next(3, 6);
+            //for (int i = 0; i < particleCount; i++)
+            //{
+            //    Vector2 direction = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(15)) * Main.rand.NextFloat(0.5f, 1.5f);
+            //    Dust dust = Dust.NewDustPerfect(
+            //        target.Center,
+            //        DustID.ShadowbeamStaff,
+            //        direction,
+            //        0,
+            //        Color.Black,
+            //        Main.rand.NextFloat(1f, 1.5f)
+            //    );
+            //    dust.noGravity = true;
+            //}
 
             // 计数器，每 5 次命中爆发大量 ShadowAmmoMetaball
             hitCounter++;

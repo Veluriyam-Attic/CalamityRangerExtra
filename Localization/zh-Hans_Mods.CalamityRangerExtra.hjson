@@ -790,8 +790,9 @@ DeveloperItems: {
 			DisplayName: 魔影箭
 			Tooltip:
 				'''
-				飞行一段时间分裂出随机的箭
-				“你早饭吃了什么？”
+				飞行一段时间之后遁入虚空
+				从敌人附近重新出现，带着一发新的随机弹幕砸向这个敌人
+				“有点快”
 				'''
 		}
 
@@ -860,19 +861,6 @@ DeveloperItems: {
 				“想吃麻辣兔头吗？辣到爆炸（物理）的那种”
 				'''
 		}
-	}
-
-	SuperCriticalBullet: {
-		SuperCriticalBullet: {
-			DisplayName: 超暴击弹
-			Tooltip:
-				'''
-				无限穿透，基础暴击率极高
-				如果你足够幸运，那么能够触发那万里挑一的效果
-				'''
-		}
-
-		SuperCriticalBulletPROJ.DisplayName: 超暴击弹
 	}
 
 	TheGoldenFire: {
@@ -1223,6 +1211,7 @@ DeveloperItems: {
 		}
 
 		TheGoldenFirePROJ.DisplayName: 虞金引焱
+		// TheGoldenFirePROJAG.DisplayName: The Golden Fire P R O J A G
 	}
 
 	ShadowsBullet: {
@@ -1230,8 +1219,8 @@ DeveloperItems: {
 			DisplayName: 魔影弹
 			Tooltip:
 				'''
-				飞行一段时间分裂出随机的弹
-				“好看吗？帧数换的”
+				每次命中敌人都会召唤两发额外的随机弹幕往周围打过去
+				“我裂开来”
 				'''
 		}
 

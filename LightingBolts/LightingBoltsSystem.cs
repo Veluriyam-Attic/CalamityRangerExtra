@@ -11,6 +11,13 @@ namespace CalamityRangerExtra.LightingBolts
     {
         private static ParticlePool<PrettySparkleParticle> _poolPrettySparkle = new ParticlePool<PrettySparkleParticle>(200, () => new PrettySparkleParticle());
 
+        // 原版内置了很多很多的特效【它们可以通过 ParticleOrchestrator.RequestParticleSpawn() 进行调用】，你可以直接检查相关文件来获得相关信息
+        // 可以看一下这一段：https://gist.github.com/Rijam/971b5252707860b65b582093580aa49c
+        // 想去学习的话可以去这里：namespace Terraria.GameContent.Drawing; public class ParticleOrchestrator
+        // 这里面的各种光点和光学效果都是参考了上面这些的，更加倾向于那些魔法，能量，生物，环境，反射相关的特效
+        // 注意！！注意！！
+        // 本文件里的所有特效均不需要灾厄本体运行，完全独立，因为这些特效是基于原版1.4.4.9的
+
         public static void Spawn_IonizingRadiation(Vector2 position)
         {
             float triangleAngleOffset = MathHelper.ToRadians(60f);
@@ -41,32 +48,7 @@ namespace CalamityRangerExtra.LightingBolts
                     Main.ParticleSystem_World_OverPlayers.Add(particle);
                 }
             }
-
-            //// 生成复杂的 Dust 效果
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    int dustType = Main.rand.Next(3) switch
-            //    {
-            //        0 => 57, // 电弧效果
-            //        1 => 226, // 黄色能量粒子
-            //        _ => 267 // 光晕
-            //    };
-
-            //    Vector2 dustVelocity = Main.rand.NextVector2Circular(2f, 2f);
-            //    Vector2 dustPosition = position + Main.rand.NextVector2Circular(12f, 12f);
-            //    Dust dust = Dust.NewDustPerfect(dustPosition, dustType, dustVelocity, 100, Color.Yellow, Main.rand.NextFloat() * 1.5f + 0.5f);
-            //    dust.noGravity = Main.rand.NextBool();
-            //    dust.fadeIn = Main.rand.NextFloat() * 1.2f;
-            //    dust.velocity *= Main.rand.NextFloat() * 1.5f;
-            //    dust.scale *= Main.rand.NextFloat() * 1.3f;
-            //}
         }
-
-
-
-
-
-
 
         public static void Spawn_FlowerPattern(Vector2 position)
         {
@@ -119,10 +101,6 @@ namespace CalamityRangerExtra.LightingBolts
             centerParticle.AdditiveAmount = 0.5f;
             Main.ParticleSystem_World_OverPlayers.Add(centerParticle);
         }
-
-
-
-
 
 
         public static void Spawn_AncientForestWisdom(Vector2 position)
@@ -199,7 +177,7 @@ namespace CalamityRangerExtra.LightingBolts
                 particle.FadeOutStart = (int)(particle.TimeToLive * 0.7f);
                 particle.AdditiveAmount = 0.6f;
 
-                // **手动调整位置来模拟幽魂漂浮**
+                // 给点随机性
                 float waveFrequency = Main.rand.NextFloat(0.05f, 0.15f); // 波动频率
                 float waveAmplitude = Main.rand.NextFloat(waveIntensity * 0.5f, waveIntensity); // 波动大小
                 particle.Velocity = new Vector2(0, (float)Math.Sin(Main.GameUpdateCount * waveFrequency) * waveAmplitude);
@@ -365,8 +343,111 @@ namespace CalamityRangerExtra.LightingBolts
 
 
 
+        public static void Spawn_AstralSoulLightsA(Vector2 position)
+        {
+            float lifespan = 36f; // 生命时长
+            float fadeTime = lifespan / 2f; // 过渡时间
+
+            // 颜色池，确保每个光点独立选取其中一个颜色，而不是混合颜色
+            // 你可以直接下载某一个武器的贴图到本地，然后用photoshop打开选取这个颜色，点开，你就能看到它的16进制和rgb编码了
+            Color[] colorPool = new Color[]
+            {
+        new Color(255, 164, 94),  // #FFA45E
+        new Color(66, 189, 181),  // #42BDB5
+        new Color(109, 242, 196), // #6DF2C4
+        new Color(237, 93, 83)    // #ED5D53
+            };
+
+            // 生成 3~7 个光点
+            int pointCount = Main.rand.Next(3, 8);
+            for (int i = 0; i < pointCount; i++)
+            {
+                PrettySparkleParticle spark = _poolPrettySparkle.RequestParticle();
+
+                // 随机选择颜色
+                spark.ColorTint = colorPool[Main.rand.Next(colorPool.Length)];
+
+                // 位置设定
+                spark.LocalPosition = position;
+
+                // 旋转角度随机（无运动，仅用于光点方向的随机变化）
+                spark.Rotation = Main.rand.NextFloat() * MathHelper.TwoPi;
+
+                // 设定光点大小
+                spark.Scale = new Vector2(2f, 2f) * (0.8f + Main.rand.NextFloat() * 0.4f);
+
+                // 设定淡入淡出时机
+                spark.FadeInNormalizedTime = 5E-06f; // 极短时间淡入
+                spark.FadeOutNormalizedTime = 0.95f; // 生命接近结束时淡出
+
+                // 设定生命周期
+                spark.TimeToLive = lifespan;
+                spark.FadeOutEnd = lifespan;
+                spark.FadeInEnd = fadeTime;
+                spark.FadeOutStart = fadeTime;
+
+                // 设定额外亮度
+                spark.AdditiveAmount = 0.35f;
+
+                // 添加到粒子系统
+                Main.ParticleSystem_World_OverPlayers.Add(spark);
+            }
+        }
 
 
+
+        public static void Spawn_AstralSoulLightsB(Vector2 position)
+        {
+            float lifespan = 36f; // 生命时长
+            float fadeTime = lifespan / 2f; // 过渡时间
+
+            // 颜色池，每个光点独立选择其中一个颜色
+            Color[] colorPool = new Color[]
+            {
+        new Color(255, 164, 94),  // #FFA45E 橙黄色
+        new Color(66, 189, 181),  // #42BDB5 亮青色
+        new Color(109, 242, 196), // #6DF2C4 薄荷绿色
+        new Color(237, 93, 83)    // #ED5D53 深珊瑚红
+            };
+
+            // 生成 3~7 个光点
+            int pointCount = Main.rand.Next(3, 8);
+            for (int i = 0; i < pointCount; i++)
+            {
+                PrettySparkleParticle spark = _poolPrettySparkle.RequestParticle();
+
+                // 随机选择颜色
+                spark.ColorTint = colorPool[Main.rand.Next(colorPool.Length)];
+
+                // 位置设定
+                spark.LocalPosition = position;
+
+                // 旋转角度随机
+                spark.Rotation = Main.rand.NextFloat() * MathHelper.TwoPi;
+
+                // **修改 Scale，使其更接近 TrueExcalibur**
+                spark.Scale = new Vector2(5f, 0.5f) * (0.8f + Main.rand.NextFloat() * 0.4f);
+
+                // **确保绘制方式一致**
+                spark.DrawVerticalAxis = false;
+
+                // 设定淡入淡出时机
+                spark.FadeInNormalizedTime = 5E-06f; // 快速淡入
+                spark.FadeOutNormalizedTime = 0.95f; // 柔和消失
+
+                // 设定生命周期
+                spark.TimeToLive = lifespan;
+                spark.FadeOutEnd = lifespan;
+                spark.FadeInEnd = fadeTime;
+                spark.FadeOutStart = fadeTime;
+
+                // 设定额外亮度
+                spark.AdditiveAmount = 0.35f;
+
+                // 添加到粒子系统
+                Main.ParticleSystem_World_OverPlayers.Add(spark);
+            }
+        }
 
 
 

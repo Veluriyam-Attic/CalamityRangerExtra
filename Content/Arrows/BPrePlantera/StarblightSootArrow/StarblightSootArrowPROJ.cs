@@ -18,6 +18,7 @@ using CalamityMod;
 using Microsoft.Xna.Framework.Graphics;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityRangerExtra.CREConfigs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Arrows.BPrePlantera.StarblightSootArrow
 {
@@ -94,6 +95,11 @@ namespace CalamityRangerExtra.Content.Arrows.BPrePlantera.StarblightSootArrow
         {
             // 添加Buff
             target.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 300); // 幻星感染
+                                                                               // 检查是否启用了特效
+            if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
+            {
+                LightingBoltsSystem.Spawn_AstralSoulLightsB(target.Center + Main.rand.NextVector2Circular(16f, 16f));
+            }
 
             #region 旧代码
 

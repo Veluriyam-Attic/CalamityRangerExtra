@@ -12,6 +12,7 @@ using Terraria.ModLoader;
 using Terraria;
 using CalamityMod.Particles;
 using CalamityRangerExtra.CREConfigs;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.Ammunition.BPrePlantera.StarblightSootBullet
 {
@@ -103,7 +104,7 @@ namespace CalamityRangerExtra.Content.Ammunition.BPrePlantera.StarblightSootBull
                         0f,
                         30));
                 }
-
+                LightingBoltsSystem.Spawn_AstralSoulLightsA(target.Center);
             }
 
 

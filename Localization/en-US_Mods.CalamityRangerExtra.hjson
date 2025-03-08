@@ -878,19 +878,6 @@ DeveloperItems: {
 		}
 	}
 
-	SuperCriticalBullet: {
-		SuperCriticalBullet: {
-			DisplayName: Supercrit Round
-			Tooltip:
-				'''
-				Pierces infinitely and has high base crit
-				There's also a hidden effect - see if you can trigger it!
-				'''
-		}
-
-		SuperCriticalBulletPROJ.DisplayName: Supercrit Round
-	}
-
 	TheGoldenFire: {
 		TheGoldenFire: {
 			DisplayName: Lamp of Illusion
@@ -1239,6 +1226,7 @@ DeveloperItems: {
 		}
 
 		TheGoldenFirePROJ.DisplayName: Lamp of Illusion
+		TheGoldenFirePROJAG.DisplayName: The Golden Fire P R O J A G
 	}
 
 	ShadowsBullet: {
