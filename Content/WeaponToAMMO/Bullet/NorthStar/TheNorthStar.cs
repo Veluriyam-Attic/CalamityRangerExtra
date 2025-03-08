@@ -23,7 +23,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.NorthStar
         {
             Item.width = 12;
             Item.height = 18;
-            Item.damage = 15;
+            Item.damage = 12;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 1;
             Item.consumable = false;
