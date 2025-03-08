@@ -2,12 +2,11 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Microsoft.Xna.Framework.Graphics;
+using CalamityRangerExtra.LightingBolts;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
 {
@@ -15,10 +14,12 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
     {
         public new string LocalizationCategory => "WeaponToAMMO.Bullet.TheEmpty";
         private float rotationAngle = 0f; // 用于粒子旋转的角度
-        private const float rotationSpeed = 0.05f; // 粒子旋转速度
-        private static Dictionary<int, bool> sizeChangeRegistry = new Dictionary<int, bool>(); // 记录已改变大小的敌人
-
-        public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
+        private const float rotationSpeed = 0.02f; // 自转速度，较慢
+        private float pulseTimer = 0f; // 用于脉冲变大小
+        private float randomMoveTimer = 0f; // 随机运动时间
+        private bool isTracking = false; // 是否开始追踪
+        private Vector2 randomVelocity; // 用于存储随机运动的速度
+        public override string Texture => "CalamityMod/Particles/Sparkle";
 
         public override void SetStaticDefaults()
         {
@@ -28,7 +29,20 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
 
         public override bool PreDraw(ref Color lightColor)
         {
-            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
+            float scaleMultiplier = 1f + 0.15f * (float)Math.Sin(pulseTimer); // 脉冲缩放效果
+            lightColor = Color.Cyan * 0.75f; // 幽灵蓝色
+
+            Main.EntitySpriteDraw(
+                Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value,
+                Projectile.Center - Main.screenPosition,
+                null,
+                lightColor,
+                Projectile.rotation,
+                new Vector2(Projectile.width / 2, Projectile.height / 2), // 居中绘制
+                scaleMultiplier,
+                SpriteEffects.None,
+                0
+            );
             return false;
         }
 
@@ -39,7 +53,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.penetrate = Main.getGoodWorld ? -1 : 1; // 根据模式设置穿透次数
+            Projectile.penetrate = Main.getGoodWorld ? -1 : 1;
             Projectile.timeLeft = 600;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
@@ -51,39 +65,29 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
 
         public override void AI()
         {
-            // 保持弹幕旋转（对于倾斜走向的弹幕而言）
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
+            Projectile.rotation += rotationSpeed; // 持续自转
+            pulseTimer += 0.05f; // 控制脉冲效果
+            Lighting.AddLight(Projectile.Center, Color.Cyan.ToVector3() * 0.55f);
 
-            // Lighting - 添加深橙色光源，光照强度为 0.55
-            Lighting.AddLight(Projectile.Center, Color.Orange.ToVector3() * 0.55f);
-
-            // 生成淡蓝色粒子环绕效果
-            rotationAngle += rotationSpeed;
-            if (rotationAngle > MathHelper.TwoPi)
+            if (!isTracking)
             {
-                rotationAngle -= MathHelper.TwoPi;
-            }
-
-
-            // 这个特效不可关闭，因为子弹的贴图是透明的，关闭了之后子弹就看不到了
-            {
-                // 粒子位置计算，形成等边三角形环绕
-                float[] angles = { 0f, MathHelper.TwoPi / 3f, MathHelper.TwoPi * 2f / 3f };
-                float radius = 1 * 16f; // 半径为1格
-                foreach (float initialAngle in angles)
+                // 进入随机运动模式
+                randomMoveTimer += 1f;
+                if (randomMoveTimer > 60f) // 每 1 秒重新生成一个随机方向
                 {
-                    float angle = initialAngle + rotationAngle;
-                    Vector2 position = Projectile.Center + new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                    int dust = Dust.NewDust(position, 0, 0, DustID.UltraBrightTorch, 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 1.5f));
-                    Main.dust[dust].noGravity = true;
-                    Main.dust[dust].velocity = Vector2.Zero;
+                    randomMoveTimer = 0f;
+                    randomVelocity = Main.rand.NextVector2Circular(3f, 3f); // 生成随机速度
+                }
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, randomVelocity, 0.1f);
+
+                if (Projectile.timeLeft < 500) // 100 帧后开始追踪
+                {
+                    isTracking = true;
                 }
             }
-
-            // 追踪逻辑
-            if (Main.getGoodWorld || Projectile.ai[1] > 15)
+            else
             {
-                // 根据模式决定追踪范围和速度
+                // 追踪逻辑
                 float trackingRange = Main.getGoodWorld ? 3800f : 1800f;
                 float trackingSpeed = Main.getGoodWorld ? 15f : 12f;
 
@@ -94,37 +98,39 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.TheEmpty
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, direction * trackingSpeed, 0.08f);
                 }
             }
-            else
-            {
-                Projectile.ai[1]++;
-            }
+
+            // 粒子特效，往正后方喷射
+            float dustSpeed = -Projectile.velocity.Length() * 1.2f; // 速度比弹幕本身快一点
+            Vector2 dustSpawnPos = Projectile.Center + Main.rand.NextVector2Circular(1.5f * 16f, 1.5f * 16f); // 以弹幕中心为中心，半径 1.5 × 16 的随机点
+            int dust = Dust.NewDust(dustSpawnPos, 0, 0, DustID.UltraBrightTorch, 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 1.5f));
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * dustSpeed;
         }
 
-
-        // 新增字典用于记录每个敌人的变更方向和原始缩放比例
+        // 保留命中后大小变化的逻辑
         private Dictionary<int, bool> sizeChangeDirection = new Dictionary<int, bool>();
         private Dictionary<int, float> originalScale = new Dictionary<int, float>();
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            // 如果这是第一次击中该敌人，随机决定变大或变小，并记录原始缩放比例
             if (!sizeChangeDirection.ContainsKey(target.whoAmI))
             {
-                sizeChangeDirection[target.whoAmI] = Main.rand.NextBool(); // true 表示变大，false 表示变小
-                originalScale[target.whoAmI] = target.scale; // 记录原始缩放比例
+                sizeChangeDirection[target.whoAmI] = Main.rand.NextBool();
+                originalScale[target.whoAmI] = target.scale;
             }
-
-            // 根据记录决定变大或变小的逻辑
             float scaleChangeFactor = sizeChangeDirection[target.whoAmI] ? 1.01f : 0.99f;
             target.scale *= scaleChangeFactor;
             target.width = (int)(originalScale[target.whoAmI] * target.width * scaleChangeFactor);
             target.height = (int)(originalScale[target.whoAmI] * target.height * scaleChangeFactor);
+            target.netUpdate = true;
 
-            target.netUpdate = true; // 确保网络同步
+            LightingBoltsSystem.Spawn_GhostlyImpact(Projectile.Center);
+
         }
-
-
-
+        public override bool? CanDamage()
+        {
+            return isTracking ? base.CanDamage() : false;
+        }
 
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using CalamityMod.Particles;
 using CalamityRangerExtra.CREConfigs;
+using Terraria.GameContent;
 
 namespace CalamityRangerExtra.Content.Ammunition.DPreDog.PolterplasmBullet
 {
@@ -29,7 +30,7 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.PolterplasmBullet
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
-                Texture2D lightTexture = ModContent.Request<Texture2D>("CalamityRangerExtra/Content/Ammunition/DPreDog/PolterplasmBullet/PolterplasmBulletFlower").Value;
+                Texture2D lightTexture = TextureAssets.Projectile[Projectile.type].Value;
                 for (int i = 0; i < Projectile.oldPos.Length; i++)
                 {
                     float colorInterpolation = (float)Math.Cos(Projectile.timeLeft / 32f + Main.GlobalTimeWrappedHourly / 20f + i / (float)Projectile.oldPos.Length * MathHelper.Pi) * 0.5f + 0.5f;

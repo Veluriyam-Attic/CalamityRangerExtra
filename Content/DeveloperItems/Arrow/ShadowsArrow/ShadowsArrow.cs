@@ -22,7 +22,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Arrow.ShadowsArrow
         public new string LocalizationCategory => "DeveloperItems.ShadowsArrow";
         public override void SetDefaults()
         {
-            Item.damage = 150;
+            Item.damage = 78;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 14;
             Item.height = 32;
@@ -34,7 +34,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Arrow.ShadowsArrow
             Item.rare = ModContent.RarityType<HotPink>();
             Item.Calamity().devItem = true;
             Item.shoot = ModContent.ProjectileType<ShadowsArrowPROJ>();
-            Item.shootSpeed = 7f;
+            Item.shootSpeed = 9f;
             Item.ammo = AmmoID.Arrow; // 这是箭矢类型的弹药
         }
 

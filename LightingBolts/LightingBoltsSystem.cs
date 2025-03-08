@@ -321,5 +321,55 @@ namespace CalamityRangerExtra.LightingBolts
             }
         }
 
+
+        public static void Spawn_GhostlyImpact(Vector2 position)
+        {
+            int ghostPointCount = Main.rand.Next(3, 7); // 生成 3~7 个光点
+            float minRadius = 48f; // 3×16
+            float maxRadius = 80f; // 5×16
+            float speed = 2f; // 速度，向中心收缩
+
+            // 幽灵蓝色光点
+            Color ghostBlue = new Color(0.5f, 0.8f, 1f, 1f);
+
+            for (int i = 0; i < ghostPointCount; i++)
+            {
+                // 随机生成光点的初始位置，在 3×16 ~ 5×16 半径范围内
+                Vector2 spawnOffset = Main.rand.NextVector2Circular(minRadius, maxRadius);
+                Vector2 spawnPosition = position + spawnOffset;
+
+                // 计算朝向中心但带有随机偏移的速度方向
+                Vector2 velocityDirection = (position - spawnPosition).SafeNormalize(Vector2.Zero);
+                velocityDirection = velocityDirection.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)); // 添加偏移
+                Vector2 velocity = velocityDirection * speed;
+
+                // 创建光点
+                PrettySparkleParticle particle = _poolPrettySparkle.RequestParticle();
+                particle.ColorTint = ghostBlue;
+                particle.LocalPosition = spawnPosition;
+                particle.Velocity = velocity; // 让光点朝向中心点位移动
+                particle.Scale = new Vector2(1.5f, 1.5f);
+                particle.FadeInNormalizedTime = 5E-06f; // 快速淡入
+                particle.FadeOutNormalizedTime = 0.95f; // 柔和消失
+                particle.TimeToLive = Main.rand.Next(40, 60); // 40~60 帧
+                particle.FadeOutEnd = particle.TimeToLive;
+                particle.FadeInEnd = (int)(particle.TimeToLive * 0.3f);
+                particle.FadeOutStart = (int)(particle.TimeToLive * 0.7f);
+                particle.AdditiveAmount = 0.45f; // 提高光点的发光感
+
+                Main.ParticleSystem_World_OverPlayers.Add(particle);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }

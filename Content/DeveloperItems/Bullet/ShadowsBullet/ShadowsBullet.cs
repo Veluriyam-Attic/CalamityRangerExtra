@@ -19,7 +19,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
         public new string LocalizationCategory => "DeveloperItems.ShadowsBullet";
         public override void SetDefaults()
         {
-            Item.damage = 100;
+            Item.damage = 69;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 14;
             Item.height = 32;

@@ -11,6 +11,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using CalamityRangerExtra.CREConfigs;
+using Terraria.GameContent;
 
 namespace CalamityRangerExtra.Content.Ammunition.DPreDog.EffulgentFeatherBullet
 {
@@ -29,7 +30,7 @@ namespace CalamityRangerExtra.Content.Ammunition.DPreDog.EffulgentFeatherBullet
             {
                 // 获取 SpriteBatch 和投射物纹理
                 SpriteBatch spriteBatch = Main.spriteBatch;
-                Texture2D lightTexture = ModContent.Request<Texture2D>("CalamityRangerExtra/Content/Ammunition/DPreDog/EffulgentFeatherBullet/EffulgentFeatherBulletPROJ").Value;
+                Texture2D lightTexture = TextureAssets.Projectile[Projectile.type].Value;
 
                 // 遍历投射物的旧位置数组，绘制光学拖尾效果
                 for (int i = 0; i < Projectile.oldPos.Length; i++)

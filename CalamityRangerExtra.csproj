@@ -97,6 +97,7 @@
 	  <None Remove="Content\DeveloperItems\Arrow\ExplodingRabbit\ExplodingRabbit.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\GlitchArrow\GlitchArrow.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\GlitchArrow\木头.png" />
+	  <None Remove="Content\DeveloperItems\Arrow\ShadowsArrow\SAPortalPROJ.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\ShadowsArrow\ShadowsArrow.png" />
 	  <None Remove="Content\DeveloperItems\Bullet\ShadowsBullet\22.png" />
 	  <None Remove="Content\DeveloperItems\Bullet\ShadowsBullet\ShadowsBullet.png" />
@@ -263,6 +264,7 @@
 	  <None Remove="Content\凝胶\寒元凝胶\寒元凝胶_DeBuff.png" />
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶.png" />
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶_DeBuff.png" />
+	  <None Remove="LightingBolts\Metaballs\ShadowAmmoLayer.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="CalamityMod">

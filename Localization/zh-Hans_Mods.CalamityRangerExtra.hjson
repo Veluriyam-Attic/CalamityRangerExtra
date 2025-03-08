@@ -796,6 +796,7 @@ DeveloperItems: {
 		}
 
 		ShadowsArrowPROJ.DisplayName: 魔影箭
+		// SAPortalPROJ.DisplayName: S A Portal P R O J
 	}
 
 	AllTheBirds: {
@@ -1597,7 +1598,7 @@ WeaponToAMMO: {
 				DisplayName: 空弹
 				Tooltip:
 					'''
-					追踪敌人，让敌人随地大小变
+					停下，思考，追踪，随地大小变
 					可改变碰撞箱，对Boss也有效
 					“容易让游戏崩溃”
 					'''
