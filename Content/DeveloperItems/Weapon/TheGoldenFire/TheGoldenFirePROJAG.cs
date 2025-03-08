@@ -37,7 +37,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
             Projectile.MaxUpdates = 4;
             Projectile.timeLeft = Lifetime; // 24 effectively
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 8;
+            Projectile.idStaticNPCHitCooldown = -1;// 命中后消失
         }
         private bool isStatic = false; // 默认情况下，弹幕不是静止状态
 
@@ -145,9 +145,5 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
 
             return false;
         }
-
-
-
-
     }
 }
