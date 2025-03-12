@@ -14,6 +14,8 @@ using CalamityRangerExtra.CREConfigs;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
+using CalamityMod.Graphics.Primitives;
+using CalamityRangerExtra.LightingBolts.Shader;
 
 namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.ApoctosisMagicBullet
 {
@@ -24,44 +26,81 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.ApoctosisMagicBullet
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 80;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
-
+        public float PrimitiveWidthFunction(float completionRatio) => Projectile.scale * 15f;
+        public Color PrimitiveColorFunction(float _) => Color.White * Projectile.Opacity;
         public override bool PreDraw(ref Color lightColor)
         {
-            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
+            //// **确保 Shader 存在**
+            //Effect shader = ShaderGames.RainbowShader;
+
+            //// **应用 Shader 变量**
+            //shader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+            //shader.Parameters["uOpacity"].SetValue(1f);
+
+            //// **应用 Shader**
+            //Main.spriteBatch.End(); // 先关闭原有的 Begin
+            //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, shader, Main.GameViewMatrix.TransformationMatrix);
+
+
+
+            //// **确保 Shader 存在**
+            //Effect shader = ShaderGames.EdgeGlowShader;
+            //if (shader == null) return true;
+
+            //// **设置 Shader 变量**
+            //shader.Parameters["uThreshold"].SetValue(0.1f); // 边缘检测阈值
+            //shader.Parameters["uGlowColor"].SetValue(new Vector4(0.5f, 0.8f, 1f, 1f)); // 发光颜色
+
+            //// **应用 Shader**
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, shader, Main.GameViewMatrix.TransformationMatrix);
+
+
+
+            //// **确保 Shader 存在**
+            //Effect shader = ShaderGames.GlassRefractionShader;
+            //if (shader == null) return true;
+
+            //// **设置 Shader 变量**
+            //shader.Parameters["uRefractStrength"].SetValue(0.05f); // 折射强度
+            //shader.Parameters["uOpacity"].SetValue(0.7f); // 半透明程度
+
+            //// **应用 Shader**
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, shader, Main.GameViewMatrix.TransformationMatrix);
+
+
+
+
+            // **确保 Shader 存在**
+            Effect shader = ShaderGames.DistortionShader;
+            if (shader == null) return true;
+
+            // **设置 Shader 变量**
+            shader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+            shader.Parameters["uDistortionStrength"].SetValue(0.1f); // 扭曲强度
+
+            // **应用 Shader**
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, shader, Main.GameViewMatrix.TransformationMatrix);
+
+
+
+            // **绘制本体**
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Vector2 origin = texture.Size() * 0.5f;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+            Main.spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
+
+            Main.spriteBatch.End(); // 结束 Shader 渲染
+            Main.spriteBatch.Begin(); // 重新启用普通渲染
+
             return false;
         }
 
-        public override void PostDraw(Color lightColor)
-        {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-            // 获取 Shader
-            var shader = GameShaders.Misc["CalamityRangerExtra:FirstShader"];
-            shader.UseOpacity(0.8f);
-            shader.Apply();
-
-            // 修正偏移（直角除以2）
-            Vector2 drawOrigin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
-
-            Main.spriteBatch.Draw(
-                TextureAssets.Projectile[Projectile.type].Value,
-                Projectile.Center - Main.screenPosition,
-                null,
-                Color.White,
-                Projectile.rotation,
-                drawOrigin,
-                1f,
-                SpriteEffects.None,
-                0f
-            );
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin();
-        }
 
 
         public override void SetDefaults()
@@ -215,6 +254,5 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.ApoctosisMagicBullet
                 }
             }
         }
-
     }
 }

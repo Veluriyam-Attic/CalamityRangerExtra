@@ -178,6 +178,11 @@ Buffs: {
 		DisplayName: 逆反之规
 		Description: 不用翻译，减少命中的敌人的伤害
 	}
+
+	KaleidoscopeBuff: {
+		// DisplayName: Kaleidoscope Buff
+		// Description: Mods.CalamityRangerExtra.Buffs.KaleidoscopeBuff.Description
+	}
 }
 
 Arrows: {
@@ -1660,6 +1665,7 @@ Projectiles: {
 	Melee.WulfrimSpark.DisplayName: 电火花
 	NewWeapons.EAfterDog.AuricArrowNPC.DisplayName: 火球
 	// TenderElegyBeil.DisplayName: Tender Elegy Beil
+	// PyroblastRocketScorpio.DisplayName: Pyroblast Rocket Scorpio
 }
 
 Projectile: {

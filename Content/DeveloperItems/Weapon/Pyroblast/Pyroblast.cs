@@ -92,65 +92,84 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.Pyroblast
         {
             if (player.altFunctionUse == 2) // 右键逻辑
             {
-                // 释放8个弹幕，围绕玩家均匀分布
-                for (int i = 0; i < 8; i++)
+                //// 释放8个弹幕，围绕玩家均匀分布
+                //for (int i = 0; i < 8; i++)
+                //{
+                //    float angle = MathHelper.TwoPi / 8 * i; // 计算每个弹幕的角度
+                //    Vector2 spawnVelocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 7f; // 计算速度
+                //    Projectile projectile = Projectile.NewProjectileDirect(
+                //        source,
+                //        player.Center,
+                //        spawnVelocity,
+                //        ModContent.ProjectileType<AuricArrowBALL>(),
+                //        damage,
+                //        knockback,
+                //        player.whoAmI
+                //    );
+                //    projectile.scale = 1.7f; // 设置弹幕的缩放比例
+                //}
+
+                //// 释放粒子特效
+                //for (int i = 0; i < 50; i++)
+                //{
+                //    // 随机生成的环形粒子
+                //    float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                //    float distance = Main.rand.NextFloat(20f, 80f);
+                //    Vector2 dustPosition = player.Center + new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * distance;
+                //    Dust dust = Dust.NewDustPerfect(dustPosition, DustID.GoldCoin, Vector2.Zero, 150, Color.LightYellow, 3.5f);
+                //    dust.velocity = Vector2.UnitY.RotatedBy(angle) * Main.rand.NextFloat(2f, 4f);
+                //    dust.noGravity = true;
+                //}
+
+                //// 释放规则粒子链
+                //for (int i = 0; i < 8; i++)
+                //{
+                //    float angle = MathHelper.TwoPi / 8 * i;
+                //    for (int j = 1; j <= 5; j++) // 每条链包含多个粒子
+                //    {
+                //        Vector2 chainPosition = player.Center + new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * j * 15f;
+                //        Dust chainDust = Dust.NewDustPerfect(chainPosition, DustID.DesertTorch, Vector2.Zero, 100, Color.Orange, 2.5f + j * 0.1f);
+                //        chainDust.velocity = Vector2.Zero; // 静止粒子
+                //        chainDust.noGravity = true;
+                //    }
+                //}
+
+                //// 释放鼠标方向粒子
+                //for (int i = 0; i < 12; i++)
+                //{
+                //    float randomAngle = Main.rand.NextFloat(-MathHelper.ToRadians(15), MathHelper.ToRadians(15)); // 随机角度范围 -15 至 15 度
+                //    Vector2 direction = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX).RotatedBy(randomAngle);
+                //    Vector2 positionOffset = player.Center + direction * Main.rand.NextFloat(10f, 40f); // 随机位置偏移
+                //    Particle smoke = new HeavySmokeParticle(
+                //        positionOffset,
+                //        direction * Main.rand.NextFloat(12f, 42f), // 随机速度
+                //        Color.Lerp(Color.Orange, Color.Yellow, Main.rand.NextFloat()), // 随机混合颜色
+                //        Main.rand.Next(30, 60), // 粒子存活时间
+                //        Main.rand.NextFloat(0.5f, 1.25f), // 粒子大小
+                //        1.0f,
+                //        MathHelper.ToRadians(Main.rand.NextFloat(-5f, 5f)), // 随机旋转速度
+                //        true // 强视觉效果
+                //    );
+                //    GeneralParticleHandler.SpawnParticle(smoke);
+                //}
+
+                // **平行发射 5 发 PyroblastRocketScorpio 火箭弹**
+                for (int i = 0; i < 5; i++)
                 {
-                    float angle = MathHelper.TwoPi / 8 * i; // 计算每个弹幕的角度
-                    Vector2 spawnVelocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 7f; // 计算速度
-                    Projectile projectile = Projectile.NewProjectileDirect(
+                    // **计算水平偏移**
+                    Vector2 offset = Vector2.Normalize(velocity.RotatedBy(MathHelper.PiOver2));
+                    Vector2 spawnPosition = position + offset * Main.rand.NextFloat(-19f, 19f);
+
+                    // **发射火箭弹**
+                    Projectile.NewProjectileDirect(
                         source,
-                        player.Center,
-                        spawnVelocity,
-                        ModContent.ProjectileType<AuricArrowBALL>(),
+                        spawnPosition,
+                        velocity, // 速度与原始方向一致
+                        ModContent.ProjectileType<PyroblastRocketScorpio>(), // 替换成火箭弹
                         damage,
                         knockback,
                         player.whoAmI
                     );
-                    projectile.scale = 1.7f; // 设置弹幕的缩放比例
-                }
-
-                // 释放粒子特效
-                for (int i = 0; i < 50; i++)
-                {
-                    // 随机生成的环形粒子
-                    float angle = Main.rand.NextFloat(MathHelper.TwoPi);
-                    float distance = Main.rand.NextFloat(20f, 80f);
-                    Vector2 dustPosition = player.Center + new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * distance;
-                    Dust dust = Dust.NewDustPerfect(dustPosition, DustID.GoldCoin, Vector2.Zero, 150, Color.LightYellow, 3.5f);
-                    dust.velocity = Vector2.UnitY.RotatedBy(angle) * Main.rand.NextFloat(2f, 4f);
-                    dust.noGravity = true;
-                }
-
-                // 释放规则粒子链
-                for (int i = 0; i < 8; i++)
-                {
-                    float angle = MathHelper.TwoPi / 8 * i;
-                    for (int j = 1; j <= 5; j++) // 每条链包含多个粒子
-                    {
-                        Vector2 chainPosition = player.Center + new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * j * 15f;
-                        Dust chainDust = Dust.NewDustPerfect(chainPosition, DustID.DesertTorch, Vector2.Zero, 100, Color.Orange, 2.5f + j * 0.1f);
-                        chainDust.velocity = Vector2.Zero; // 静止粒子
-                        chainDust.noGravity = true;
-                    }
-                }
-
-                // 释放鼠标方向粒子
-                for (int i = 0; i < 12; i++)
-                {
-                    float randomAngle = Main.rand.NextFloat(-MathHelper.ToRadians(15), MathHelper.ToRadians(15)); // 随机角度范围 -15 至 15 度
-                    Vector2 direction = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX).RotatedBy(randomAngle);
-                    Vector2 positionOffset = player.Center + direction * Main.rand.NextFloat(10f, 40f); // 随机位置偏移
-                    Particle smoke = new HeavySmokeParticle(
-                        positionOffset,
-                        direction * Main.rand.NextFloat(12f, 42f), // 随机速度
-                        Color.Lerp(Color.Orange, Color.Yellow, Main.rand.NextFloat()), // 随机混合颜色
-                        Main.rand.Next(30, 60), // 粒子存活时间
-                        Main.rand.NextFloat(0.5f, 1.25f), // 粒子大小
-                        1.0f,
-                        MathHelper.ToRadians(Main.rand.NextFloat(-5f, 5f)), // 随机旋转速度
-                        true // 强视觉效果
-                    );
-                    GeneralParticleHandler.SpawnParticle(smoke);
                 }
             }
             else // 左键逻辑

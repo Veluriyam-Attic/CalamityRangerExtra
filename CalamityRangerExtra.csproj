@@ -8,6 +8,12 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Remove="LightingBolts\Shader\FXandXNB\**" />
+	  <Compile Remove="LightingBolts\Shader\FXandXNB\**" />
+	  <EmbeddedResource Remove="LightingBolts\Shader\FXandXNB\**" />
+	  <None Remove="LightingBolts\Shader\FXandXNB\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <AdditionalFiles Remove="LightingBolts\Shader\FirstShader.fx" />
 	</ItemGroup>
 	<ItemGroup>
@@ -108,6 +114,7 @@
 	  <None Remove="Content\DeveloperItems\Gel\魔影凝胶.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\AlloyRailgun\AlloyRailgun.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\AlloyRailgun\AlloyRailgunHold.png" />
+	  <None Remove="Content\DeveloperItems\Weapon\Pyroblast\PyroblastRocketScorpio.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\TenderElegy\TenderElegyi.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\TheGoldenFire\FireProj.png" />
 	  <None Remove="Content\DeveloperItems\Weapon\TheGoldenFire\TheGoldenFire.png" />
@@ -268,10 +275,43 @@
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶.png" />
 	  <None Remove="Content\凝胶\霁云凝胶\霁云凝胶_DeBuff.png" />
 	  <None Remove="LightingBolts\Metaballs\ShadowAmmoLayer.png" />
+	  <None Remove="lightingbolts\shader\DistortionShader.fx" />
+	  <None Remove="LightingBolts\Shader\DistortShader.fx" />
+	  <None Remove="lightingbolts\shader\EdgeGlowShader.fx" />
+	  <None Remove="lightingbolts\shader\EnchantmentShader.fx" />
 	  <None Remove="LightingBolts\Shader\FirstShader.fx" />
+	  <None Remove="lightingbolts\shader\GlassRefractionShader.fx" />
+	  <None Remove="LightingBolts\Shader\GlitchBlocksShader.fx" />
+	  <None Remove="LightingBolts\Shader\HGTShader.fx" />
+	  <None Remove="LightingBolts\Shader\KaleidoscopeBuff.png" />
+	  <None Remove="lightingbolts\shader\RainbowShader.fx" />
+	  <None Remove="lightingbolts\shader\SecondShader.fx" />
+	  <None Remove="LightingBolts\Shader\TailMagic.fx" />
+	  <None Remove="LightingBolts\Shader\TailModern.fx" />
+	  <None Remove="LightingBolts\Shader\TailTechnology.fx" />
+	  <None Remove="lightingbolts\shader\ThirdShader.fx" />
+	  <None Remove="LightingBolts\Shader\TrailModernShader教学版本.txt" />
+	  <None Remove="LightingBolts\Shader\XNBcoder\Effects\ArtAttackTrail.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\AuroraWaveShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\CyberNeonGlow.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\FireBurnShader.fx" />
+	  <None Remove="LightingBolts\Shader\XNBcoder\Effects\GrayscaleShader.fx" />
+	  <None Remove="LightingBolts\Shader\XNBcoder\Effects\KaleidoscopeScreenShader.fx" />
+	  <None Remove="LightingBolts\Shader\XNBcoder\Effects\KaleidoscopeShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\LiquidFlowShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\MagnifyDistortionShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\PixelationShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\ScanlineShader.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TailFirst.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TailSecond.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TrailBlazingFlame.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TrailFrostCrystal.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TrailGhostlyPhantom.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\TrailWarpDistortion.fx" />
+	  <None Remove="lightingbolts\shader\xnbcoder\effects\WormShader.fx" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Include="LightingBolts\Shader\FirstShader.fx" />
+	  <Compile Include="LightingBolts\Shader\222\FirstShader.fx" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="CalamityMod">
@@ -284,7 +324,6 @@
 	  <Folder Include="Content\DeveloperItems\Gel\新文件夹\" />
 	  <Folder Include="Content\DeveloperItems\Weapon\Pyroblast\新文件夹\" />
 	  <Folder Include="Content\DeveloperItems\Weapon\新文件夹\" />
-	  <Folder Include="LightingBolts\Shader\FXandXNB\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Build.Framework" Version="17.12.6" />
