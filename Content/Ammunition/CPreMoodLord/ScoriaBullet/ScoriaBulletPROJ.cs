@@ -108,12 +108,15 @@ namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.ScoriaBullet
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            // 获取命中敌人的玩家
+
             Player player = Main.player[Projectile.owner];
             if (player.TryGetModPlayer<ScoriaBulletPlayer>(out var modPlayer))
             {
-                modPlayer.OnScoriaBulletHit(); // 通知 ScoriaBulletPlayer 处理命中事件
+                modPlayer.IncreaseStackCount(); // 增加层数
             }
+
+            // 给予 ScoriaBulletPBuff，每次命中都会刷新 5 秒
+            player.AddBuff(ModContent.BuffType<ScoriaBulletPBuff>(), 300);
 
 
             target.AddBuff(BuffID.OnFire3, 240);
@@ -147,6 +150,9 @@ namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.ScoriaBullet
                 Projectile.owner
             );
         }
+
+
+
 
         public override void OnKill(int timeLeft)
         {

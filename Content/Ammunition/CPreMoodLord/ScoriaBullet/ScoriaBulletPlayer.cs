@@ -1,68 +1,77 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
+using System;
+using CalamityMod.Projectiles.Typeless;
 
 namespace CalamityRangerExtra.Content.Ammunition.CPreMoodLord.ScoriaBullet
 {
     public class ScoriaBulletPlayer : ModPlayer
     {
-        private float accelerationBonus = 0f; // 移动加速度加成
-        private int bonusDamagePercentage = 0; // 伤害提升百分比
-        private int lastHitTime = 0; // 记录最后一次命中的时间
-        private float accRunSpeedBonus = 0f; // 冲刺速度加成
-        private float wingRunAccelerationBonus = 0f; // 翅膀加速倍率
+        public int StackCount = 0; // 层数
+        private int disableBuffTimer = 0; // 受击冷却
 
         public override void ResetEffects()
         {
-            // 移除上一帧加成
-            Player.runAcceleration -= accelerationBonus;
-            Player.GetDamage(DamageClass.Generic) -= bonusDamagePercentage / 100f;
-            Player.accRunSpeed -= accRunSpeedBonus;
-            Player.wingRunAccelerationMult -= wingRunAccelerationBonus;
-
-            // 超过 10 秒未命中，重置所有加成
-            if (lastHitTime > 0 && Main.GameUpdateCount - lastHitTime > 600)
-            {
-                accelerationBonus = 0f;
-                bonusDamagePercentage = 0;
-                accRunSpeedBonus = 0f;
-                wingRunAccelerationBonus = 0f;
-            }
-
-            // 重新应用加成
-            Player.runAcceleration += accelerationBonus;
-            Player.GetDamage(DamageClass.Generic) += bonusDamagePercentage / 100f;
-            Player.accRunSpeed += accRunSpeedBonus;
-            Player.wingRunAccelerationMult += wingRunAccelerationBonus;
-
-
-            //Player.runAcceleration += 5;
-            //Player.accRunSpeed += 5;
-            //Player.wingRunAccelerationMult += 5;
+            if (disableBuffTimer > 0)
+                disableBuffTimer--; // 受击冷却递减
         }
 
-        public void OnScoriaBulletHit()
+        private int hitCounter = 0; // 追踪命中次数
+
+        public void IncreaseStackCount()
         {
-            // 限制加成上限
-            if (accelerationBonus >= 0.30f)
-                return;
+            if (disableBuffTimer > 0) return; // 冷却期间不增加
 
-            // 提升跑步加速度
-            accelerationBonus = MathHelper.Clamp(accelerationBonus + 0.01f, 0f, 0.30f); // 最后一个值控制了他的上限
-            bonusDamagePercentage = (int)(accelerationBonus * 100); // 1% 加速度 = 1% 伤害提升
+            hitCounter++; // 记录命中次数
 
-            // 提升冲刺速度
-            accRunSpeedBonus = MathHelper.Clamp(accRunSpeedBonus + 0.01f, 0f, 0.30f);
+            if (hitCounter >= 50) // 每 50 次命中增加 1 层
+            {
+                if (StackCount < 10) // 最大 10 层
+                {
+                    StackCount++;
 
-            // 提升翅膀加速倍率
-            wingRunAccelerationBonus = MathHelper.Clamp(wingRunAccelerationBonus + 0.01f, 0f, 0.30f);
+                    // 以玩家为中心，生成 4~6 个纯视觉弹幕
+                    int projectileCount = Main.rand.Next(4, 7); // 随机 4~6 个
+                    for (int i = 0; i < projectileCount; i++)
+                    {
+                        Vector2 randomOffset = Main.rand.NextVector2Circular(5 * 16, 5 * 16); // 半径 5×16 范围内随机点
+                        Vector2 spawnPosition = Player.Center + randomOffset; // 计算生成位置
 
-            // 记录最后命中时间
-            lastHitTime = (int)Main.GameUpdateCount;
+                        Projectile.NewProjectile(
+                            Player.GetSource_FromThis(),
+                            spawnPosition,        // 生成位置
+                            Vector2.Zero,         // 无速度，静止
+                            ModContent.ProjectileType<FuckYou>(), // 视觉弹幕
+                            0,                    // 伤害为 0
+                            0f,                   // 无击退
+                            Player.whoAmI         // 设置拥有者
+                        );
+                    }
+                }
 
-            // 直接小幅度增加玩家移动速度
-            Player.velocity += new Vector2(0.15f, 0); // 轻微加速（仅限于水平移动）
+                // 刷新 Buff 10 秒
+                Player.AddBuff(ModContent.BuffType<ScoriaBulletPBuff>(), 600);
+                hitCounter = 0; // 重置计数
+            }
+        }
+
+
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
+        {
+            ClearBuffOnHit();
+        }
+
+        public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
+        {
+            ClearBuffOnHit();
+        }
+
+        private void ClearBuffOnHit()
+        {
+            StackCount = 0; // 清空层数
+            Player.ClearBuff(ModContent.BuffType<ScoriaBulletPBuff>());
+            disableBuffTimer = 300; // 受击后 5 秒内不能叠加
         }
     }
 }

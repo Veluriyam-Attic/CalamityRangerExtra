@@ -14,6 +14,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using CalamityMod.Buffs.StatDebuffs;
 
 namespace CalamityRangerExtra.Content.Ammunition.APreHardMode.TinkleshardBullet
 {
@@ -89,7 +90,7 @@ namespace CalamityRangerExtra.Content.Ammunition.APreHardMode.TinkleshardBullet
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-          
+            target.AddBuff(ModContent.BuffType<Eutrophication>(), 300); // 富营养化
         }
 
 
@@ -109,7 +110,7 @@ namespace CalamityRangerExtra.Content.Ammunition.APreHardMode.TinkleshardBullet
                     Projectile.Center,
                     velocity,
                     ModContent.ProjectileType<TinkleshardBulletSPIT>(),
-                    (int)(Projectile.damage * 0.1f), // 伤害倍率为 0.1
+                    (int)(Projectile.damage * 0.2f), // 伤害倍率为 0.1
                     Projectile.knockBack,
                     Projectile.owner
                 );

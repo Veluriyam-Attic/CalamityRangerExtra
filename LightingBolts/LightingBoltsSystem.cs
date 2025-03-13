@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.Graphics.Renderers;
 using Terraria.Graphics.Shaders;
+using Terraria.GameContent;
 
 namespace CalamityRangerExtra.LightingBolts
 {
@@ -266,38 +267,46 @@ namespace CalamityRangerExtra.LightingBolts
             }
         }
 
-        private static ParticlePool<GasParticle> _poolGas = new ParticlePool<GasParticle>(100, () => new GasParticle());
+        private static ParticlePool<FadingParticle> _poolFading = new ParticlePool<FadingParticle>(100, () => new FadingParticle());
+
         public static void Spawn_ExpandingOrangeRing(Vector2 position)
         {
-            int particleCount = 12; // 生成 12 个粒子，围绕成环
-            float initialRadius = 32f; // 初始随机范围半径（2×16）
-            float expansionSpeed = 0.5f; // 扩散速度
+            int ringCount = Main.rand.Next(1, 3); // 生成 1~2 个光环
+            float radius = 32f; // 初始半径（2×16）
+            float expansionSpeed = 0.4f; // 扩散速度
             float lifetime = 60; // 粒子存活时间
 
             // 颜色：橘黄色
             Color orangeColor = new Color(1f, 0.6f, 0.2f, 1f);
 
-            for (int i = 0; i < particleCount; i++)
+            for (int i = 0; i < ringCount; i++)
             {
-                // 计算粒子的初始位置，在 `2×16` 半径内随机生成
-                Vector2 randomOffset = Main.rand.NextVector2Circular(initialRadius, initialRadius);
-                Vector2 spawnPos = position + randomOffset;
+                // 生成光环粒子
+                FadingParticle ringParticle = _poolFading.RequestParticle();
 
-                // 计算扩散方向（从 `spawnPos` 指向 `position` 的外部）
-                Vector2 expansionDirection = (spawnPos - position).SafeNormalize(Vector2.Zero) * expansionSpeed;
+                // **修正贴图，使用 Keybrand 的光环贴图**
+                ringParticle.SetBasicInfo(TextureAssets.Extra[174], null, Vector2.Zero, position);
+                ringParticle.SetTypeInfo(lifetime);
 
-                // 创建粒子
-                GasParticle gasParticle = _poolGas.RequestParticle();
-                gasParticle.AccelerationPerFrame = Vector2.Zero;
-                gasParticle.Velocity = expansionDirection; // 让粒子向外扩散
-                gasParticle.ColorTint = orangeColor;
-                gasParticle.LocalPosition = spawnPos;
-                gasParticle.TimeToLive = (int)(lifetime * Main.rand.NextFloat(0.8f, 1.2f)); // 让不同粒子的存活时间稍有不同
-                gasParticle.InitialScale = 1f + Main.rand.NextFloat() * 0.3f; // 让不同粒子的大小稍有变化
+                // 颜色 & 透明度设定
+                ringParticle.ColorTint = orangeColor;
+                ringParticle.ColorTint.A = 200; // 让光环稍微透明一点
 
-                Main.ParticleSystem_World_BehindPlayers.Add(gasParticle);
+                // 设定大小 & 扩散
+                ringParticle.Scale = Vector2.One * (0.5f + Main.rand.NextFloat() * 0.5f);
+                ringParticle.ScaleVelocity = Vector2.One * expansionSpeed;
+                ringParticle.ScaleAcceleration = -ringParticle.ScaleVelocity / lifetime; // 让光环在消失前放缓扩散速度
+
+                // 设定淡入淡出
+                ringParticle.FadeInNormalizedTime = 0.1f;
+                ringParticle.FadeOutNormalizedTime = 0.9f;
+
+                // 添加到粒子系统
+                Main.ParticleSystem_World_OverPlayers.Add(ringParticle);
             }
         }
+
+
 
 
         public static void Spawn_GhostlyImpact(Vector2 position)

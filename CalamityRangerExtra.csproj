@@ -39,6 +39,7 @@
 	  <None Remove="Content\Ammunition\CPreMoodLord\PlagueBullet\PlagueBullet.png" />
 	  <None Remove="Content\Ammunition\CPreMoodLord\PlagueBullet\PlagueBulletPROJ.png" />
 	  <None Remove="Content\Ammunition\CPreMoodLord\ScoriaBullet\ScoriaBulletFlameburst.png" />
+	  <None Remove="Content\Ammunition\CPreMoodLord\ScoriaBullet\ScoriaBulletPBuff.png" />
 	  <None Remove="Content\Ammunition\CPreMoodLord\ScoriaBullet\熔渣弹.txt" />
 	  <None Remove="Content\Ammunition\DPreDog\DivineGeodeBullet\11.png" />
 	  <None Remove="Content\Ammunition\DPreDog\DivineGeodeBullet\DivineGeodeBullet.png" />
@@ -319,6 +320,7 @@
 	  </Reference>
 	</ItemGroup>
 	<ItemGroup>
+	  <Folder Include="Content\Accessories\" />
 	  <Folder Include="Content\Arrows\CPreMoodLord\AstralArrow\废案\" />
 	  <Folder Include="Content\Arrows\EAfterDog\AuricArrow\废弃\" />
 	  <Folder Include="Content\DeveloperItems\Gel\新文件夹\" />

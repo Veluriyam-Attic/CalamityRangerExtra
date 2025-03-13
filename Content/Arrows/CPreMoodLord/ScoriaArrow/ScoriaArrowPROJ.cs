@@ -33,6 +33,12 @@ namespace CalamityRangerExtra.Content.Arrows.CPreMoodLord.ScoriaArrow
             // 检查是否启用了特效
             if (ModContent.GetInstance<CREsConfigs>().EnableSpecialEffects)
             {
+                // 如果禁用特效计时器大于 0，则直接返回 false（禁用特效）
+                if (disableEffectTimer > 0)
+                {
+                    return false;
+                }
+
                 CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Type], lightColor, 1);
                 return false;
             }
@@ -57,8 +63,12 @@ namespace CalamityRangerExtra.Content.Arrows.CPreMoodLord.ScoriaArrow
         {
             Projectile.velocity *= 0.6f;
         }
+        private int disableEffectTimer = 0; // 计时器，控制禁用特效的时间
         public override void AI()
         {
+            if (disableEffectTimer > 0)
+                disableEffectTimer--; // 每帧减少计时器
+
             // 调整弹幕的旋转，使其在飞行时保持水平
             // 垂直朝下贴图
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
@@ -121,6 +131,9 @@ namespace CalamityRangerExtra.Content.Arrows.CPreMoodLord.ScoriaArrow
         // 定义垂直飞行和粒子效果的触发
         private void TriggerDownwardMovement()
         {
+
+            disableEffectTimer = 6; // 禁用特效 6 帧
+
             // x%的概率触发爆炸效果
             if (Main.rand.NextFloat() < 0.2f)
             {

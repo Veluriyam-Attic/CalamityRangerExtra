@@ -12,6 +12,7 @@ using CalamityRangerExtra.LightingBolts.Shader;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Microsoft.CodeAnalysis.Text;
+using CalamityRangerExtra.LightingBolts.Particles;
 
 namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.Pyroblast
 {
@@ -22,8 +23,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.Pyroblast
 
         public override void SetStaticDefaults()
         {
-            //Main.projFrames[Projectile.type] = 4; // 4 帧动画
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
         }
 
@@ -53,6 +53,23 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.Pyroblast
             // **旋转调整**
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
+            // **每帧在弹幕尾部释放粒子**
+            if (Main.rand.NextBool(2)) // 50% 概率生成粒子，防止太密集
+            {
+                Color particleColor = Color.Lerp(Color.LightBlue, Color.DarkBlue, Main.rand.NextFloat());
+                EnhancementParticle particle = new EnhancementParticle(
+                    Projectile.Center - Projectile.velocity * 0.5f, // 让粒子生成在弹幕后方
+                    -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(1f, 1f), // 让粒子略微扩散
+                    false, // 不受重力影响
+                    Main.rand.Next(25, 40), // 粒子存活时间
+                    Main.rand.NextFloat(0.6f, 1f), // 粒子大小
+                    particleColor, // 颜色在青蓝色-深蓝色间浮动
+                    0.97f, // 逐渐缩小
+                    Main.rand.NextFloat(-0.1f, 0.1f) // 旋转速度
+                );
+                GeneralParticleHandler.SpawnParticle(particle);
+            }
+
             // **加速飞行**
             if (Projectile.timeLeft > 270)
             {
@@ -81,96 +98,9 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.Pyroblast
                     }
                 }
             }
-
-            // **动画帧控制**
-            //Projectile.frameCounter++;
-            //if (Projectile.frameCounter >= 4)
-            //{
-            //    Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
-            //    Projectile.frameCounter = 0;
-            //}
         }
 
-        //public override bool PreDraw(ref Color lightColor)
-        //{
-        //    //// **选择拖尾 Shader**
-        //    //MiscShaderData trailShader = chosenForm switch
-        //    //{
-        //    //    0 => GameShaders.Misc["ModNamespace:TailMagic"],
-        //    //    1 => GameShaders.Misc["ModNamespace:TailModern"],
-        //    //    _ => GameShaders.Misc["ModNamespace:TailTechnology"],
-        //    //};
+ 
 
-        //    //// **拖尾绘制**
-        //    //trailShader.SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/EternityStreak"));
-        //    //trailShader.UseImage2("Images/Extra_189");
-        //    //trailShader.UseColor(Color.White);
-        //    //trailShader.UseSecondaryColor(Color.Gray);
-        //    //trailShader.Apply();
-
-        //    //// **正确调用拖尾 Shader**
-        //    //PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(PrimitiveWidthFunction, PrimitiveColorFunction, (_) => Projectile.Size * 0.5f, shader: trailShader), 53);
-
-
-
-
-        //    // **本体染色 Shader**
-        //    //Effect bodyShader = chosenForm switch
-        //    //{
-        //    //    0 => ShaderGames.RainbowShader,
-        //    //    1 => ShaderGames.DistortionShader,
-        //    //    _ => ShaderGames.EdgeGlowShader,
-        //    //};
-
-        //    Effect bodyShader = ShaderGames.EnchantmentShader;
-
-
-        //    if (bodyShader != null)
-        //    {
-        //        bodyShader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
-        //        bodyShader.Parameters["uOpacity"].SetValue(1f);
-
-        //        Main.spriteBatch.End();
-        //        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, bodyShader, Main.GameViewMatrix.TransformationMatrix);
-        //    }
-
-        //    // **绘制弹幕**
-        //    Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-        //    Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-        //    Vector2 origin = texture.Size() * 0.5f;
-        //    Main.spriteBatch.Draw(texture, drawPosition, new Rectangle(0, Projectile.frame * texture.Height / 4, texture.Width, texture.Height / 4), lightColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
-        //    Main.spriteBatch.End();
-        //    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-        //    return false;
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // **拖尾宽度**
-        public float PrimitiveWidthFunction(float completionRatio) => Projectile.scale * 30f;
-
-        // **拖尾颜色**
-        public Color PrimitiveColorFunction(float _) => Color.Lime * Projectile.Opacity;
     }
 }

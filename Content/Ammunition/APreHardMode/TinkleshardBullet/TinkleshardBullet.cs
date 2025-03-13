@@ -37,6 +37,7 @@ namespace CalamityRangerExtra.Content.Ammunition.APreHardMode.TinkleshardBullet
             Recipe recipe = CreateRecipe(200);
             recipe.AddRecipeGroup("CalamityRangerExtra:RecipeGroupBullet", 200);
             recipe.AddIngredient<SeaPrism>(1);
+            recipe.AddIngredient<PearlShard>(1);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

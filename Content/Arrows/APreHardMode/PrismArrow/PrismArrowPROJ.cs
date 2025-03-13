@@ -12,6 +12,8 @@ using CalamityRangerExtra.CREConfigs;
 using Terraria.DataStructures;
 using Terraria.WorldBuilding;
 using CalamityMod.Particles;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatDebuffs;
 
 namespace CalamityRangerExtra.Content.Arrows.APreHardMode.PrismArrow
 {
@@ -150,7 +152,7 @@ namespace CalamityRangerExtra.Content.Arrows.APreHardMode.PrismArrow
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-
-        }     
+            target.AddBuff(ModContent.BuffType<Eutrophication>(), 300); // 富营养化
+        }
     }
 }

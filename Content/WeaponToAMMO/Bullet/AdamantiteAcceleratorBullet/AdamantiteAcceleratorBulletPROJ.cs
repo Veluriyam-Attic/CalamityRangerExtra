@@ -40,7 +40,7 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.AdamantiteAcceleratorB
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 2; // 根据模式设置穿透次数
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 160;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
@@ -48,40 +48,85 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.AdamantiteAcceleratorB
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 11;
         }
+        private Vector2 initialVelocity; // 记录初始速度
+        private float maxSpeedMultiplier = 5f; // 速度最大倍率
         public override void OnSpawn(IEntitySource source)
         {
             // 在弹幕生成时，将速度固定为 Xf
             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 2.1f;
+            initialVelocity = Projectile.velocity; // 记录初始速度
         }
 
         public override void AI()
         {
-            // 保持弹幕旋转与速度方向一致
+            // 让弹幕旋转方向与速度一致
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
-            // 添加光源效果，使用橙色光照
+            // 添加光源效果
             Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.55f);
 
-            // 每帧生成 0~1 个红色方形粒子特效，粒子滞留在原地
-            for (int i = 0; i < Main.rand.Next(0,2); i++)
-            {
-                Vector2 randomOffset = Main.rand.NextVector2Circular(16f, 16f); // 随机生成偏移位置
-                Vector2 particlePosition = Projectile.Center + randomOffset;
-                Vector2 particleVelocity = Main.rand.NextVector2Circular(0.5f, 0.5f); // 粒子初速度
+            // **始终生成一个红色 SparkParticle**
+            //SparkParticle tip = new SparkParticle(
+            //    Projectile.Center,
+            //    Vector2.Zero, // 粒子静止
+            //    false,
+            //    20,
+            //    0.8f,
+            //    Color.Red
+            //);
+            //GeneralParticleHandler.SpawnParticle(tip);
 
-                SquareParticle squareParticle = new SquareParticle(
-                    particlePosition,
-                    particleVelocity,
-                    false,
-                    30, // 粒子存活时间
-                    1.7f + Main.rand.NextFloat(0.6f), // 粒子大小
-                    Color.Red * 1.5f // 粒子颜色
-                );
-                GeneralParticleHandler.SpawnParticle(squareParticle);
+            // **每 3 帧才执行一次粒子生成**
+            if (Projectile.ai[0] % 3 == 0)
+            {
+                // **在四个方向生成 SquareParticle**
+                Vector2[] offsets = new Vector2[]
+                {
+            new Vector2(-16, 0), // 左
+            new Vector2(16, 0),  // 右
+            new Vector2(0, -16), // 上
+            new Vector2(0, 16)   // 下
+                };
+
+                foreach (Vector2 offset in offsets)
+                {
+                    SquareParticle trail = new SquareParticle(
+                        Projectile.Center + offset,
+                        new Vector2(0, -0.1f), // 粒子向上移动
+                        false,
+                        3, // 粒子存活时间
+                        1.5f,
+                        Color.Red
+                    );
+                    GeneralParticleHandler.SpawnParticle(trail);
+                }
             }
 
-            // 弹幕速度逐帧增加，范围在 1.X ~ 1.Y 倍
-            Projectile.velocity *= Main.rand.NextFloat(1.005f, 1.025f);
+            // **更新弹幕速度**
+            Projectile.velocity *= 1.02f; // 线性加速
+            if (Projectile.velocity.Length() >= initialVelocity.Length() * maxSpeedMultiplier)
+            {
+                ResetVelocity(); // 速度达到上限后重置
+            }
+        }
+        private void ResetVelocity()
+        {
+            Projectile.velocity = initialVelocity; // 重置速度
+
+            // **释放十字形 LineParticle**
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 direction = Vector2.UnitX.RotatedBy(MathHelper.PiOver2 * i) * 4f; // 4个方向
+                LineParticle crossEffect = new LineParticle(
+                    Projectile.Center,
+                    direction,
+                    false,
+                    20,
+                    1.0f,
+                    Color.Red
+                );
+                GeneralParticleHandler.SpawnParticle(crossEffect);
+            }
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -93,6 +138,8 @@ namespace CalamityRangerExtra.Content.WeaponToAMMO.Bullet.AdamantiteAcceleratorB
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            SoundEngine.PlaySound(SoundID.Item10); // 播放音效
+
             // 计算生成的红色光环特效数量
             int particleCount = 3 + (int)(Projectile.velocity.Length() / 1f);
 

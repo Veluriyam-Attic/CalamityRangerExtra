@@ -183,6 +183,11 @@ Buffs: {
 		DisplayName: Kaleidoscope Buff
 		Description: Mods.CalamityRangerExtra.Buffs.KaleidoscopeBuff.Description
 	}
+
+	ScoriaBulletPBuff: {
+		Description: Mods.CalamityRangerExtra.Buffs.ScoriaBulletPBuff.Description
+		DisplayName: Scoria Bullet P Buff
+	}
 }
 
 Arrows: {

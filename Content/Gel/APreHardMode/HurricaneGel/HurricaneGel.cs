@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Materials;
 
 namespace CalamityRangerExtra.Content.Gel.APreHardMode.HurricaneGel
 {
@@ -43,6 +44,7 @@ namespace CalamityRangerExtra.Content.Gel.APreHardMode.HurricaneGel
             Recipe recipe = CreateRecipe(250);
             recipe.AddRecipeGroup("CalamityRangerExtra:RecipeGroupGel", 250);
             recipe.AddIngredient<SeaPrism>(10);
+            recipe.AddIngredient<PearlShard>(1);
             recipe.AddTile(TileID.Solidifier);
             recipe.Register();
         }
