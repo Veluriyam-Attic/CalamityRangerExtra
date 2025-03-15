@@ -169,7 +169,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Weapon.TheGoldenFire
                 currentStage = 8;
                 finalUseTime = 2;
             }
-
+            
             // 击败了 世纪之花
             if (NPC.downedPlantBoss)
             {

@@ -78,7 +78,7 @@ namespace CalamityRangerExtra
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
             base.OnSpawn(projectile, source);
-
+            
             if (projectile.type == ModContent.ProjectileType<HyperiusBulletProj>())
             {
                 projectile.velocity *= 1.35f;

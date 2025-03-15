@@ -109,6 +109,7 @@
 	  <None Remove="Content\DeveloperItems\Arrow\GlitchArrow\木头.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\ShadowsArrow\SAPortalPROJ.png" />
 	  <None Remove="Content\DeveloperItems\Arrow\ShadowsArrow\ShadowsArrow.png" />
+	  <None Remove="Content\DeveloperItems\Bullet\AllinOneBulletBox\AllinOneBulletBox.png" />
 	  <None Remove="Content\DeveloperItems\Bullet\ShadowsBullet\22.png" />
 	  <None Remove="Content\DeveloperItems\Bullet\ShadowsBullet\ShadowsBullet.png" />
 	  <None Remove="Content\DeveloperItems\Gel\Pyrogeist\Pyrogeist.png" />

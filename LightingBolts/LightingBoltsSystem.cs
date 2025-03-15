@@ -272,9 +272,8 @@ namespace CalamityRangerExtra.LightingBolts
         public static void Spawn_ExpandingOrangeRing(Vector2 position)
         {
             int ringCount = Main.rand.Next(1, 3); // 生成 1~2 个光环
-            float radius = 32f; // 初始半径（2×16）
-            float expansionSpeed = 0.4f; // 扩散速度
-            float lifetime = 60; // 粒子存活时间
+            float expansionSpeed = 0.1f; // 扩散速度
+            float lifetime = 40; // 粒子存活时间
 
             // 颜色：橘黄色
             Color orangeColor = new Color(1f, 0.6f, 0.2f, 1f);

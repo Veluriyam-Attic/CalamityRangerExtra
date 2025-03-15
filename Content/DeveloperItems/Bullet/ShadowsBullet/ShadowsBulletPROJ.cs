@@ -27,12 +27,12 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
         private int hitCounter = 0;
         private int frameCounter = 0;
 
-        
-        private static readonly int[] VanillaProjectiles = new int[]
+
+        public static readonly int[] VanillaProjectiles = new int[]
         {
             14, 36, 89, 104, 207, 242, 279, 283, 284, 285, 286, 287, 638, 981
         };
-        private static readonly int[] CalamityProjectiles = new int[]
+        public static readonly int[] CalamityProjectiles = new int[]
         {
             ModContent.ProjectileType<MarksmanShot>(),
             ModContent.ProjectileType<FungiOrb>(),
@@ -95,7 +95,7 @@ namespace CalamityRangerExtra.Content.DeveloperItems.Bullet.ShadowsBullet
             ModContent.ProjectileType<BloodfireBulletProj>(),
             ModContent.ProjectileType<GodSlayerSlugProj>()
         };
-        private static readonly string[] CustomModProjectiles = new string[]
+        public static readonly string[] CustomModProjectiles = new string[]
         {
             "CryonicBulletPROJ", "StarblightSootBulletPROJ",
             "AstralBulletPROJ", "PerennialBulletPROJ", "ScoriaBulletPROJ",
